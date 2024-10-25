@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { TGiftIdea, TGiftPreference } from "@/types/gift";
 import { getGeminiResponse } from "@/api/gemini";
+import { Input } from "@/components/Input";
 
 export default function Home() {
   const [relationship, setRelationship] = useState("");
@@ -72,222 +73,133 @@ export default function Home() {
 
   const handlePrompt = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log({
+      relationship,
+      age,
+      gender,
+      hobbies,
+      likes,
+      dislikes,
+      personality,
+      occasion,
+      budget,
+      giftType,
+      preference,
+      lifestyle,
+      closeness,
+      lastMinuteGift,
+      culturalAspect,
+      ecoConsciousness,
+      giftPurpose,
+    });
     getResponse();
   };
 
   return (
-    <main className="flex h-screen w-screen items-center justify-center">
+    <main className="flex h-screen justify-center">
       <form
         onSubmit={handlePrompt}
-        className="flex w-full flex-col items-center gap-4 sm:w-96"
+        className="flex flex-col items-center gap-1 sm:w-96"
       >
-        <div>
-          <label
-            htmlFor="relationship"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Relationship
-          </label>
-          <div className="mt-2">
-            <input
-              id="relationship"
-              name="relationship"
-              type="text"
-              placeholder="Brother, Sister, Uncle, Aunt, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={relationship}
-              onChange={(e) => setRelationship(e.target.value)}
-            />
-          </div>
-        </div>
-        
-        <div>
-          <label
-            htmlFor="age"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Age
-          </label>
-          <div className="mt-2">
-            <input
-              id="age"
-              name="age"
-              type="number"
-              placeholder="25"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              max={169}
-              min={1}
-            />
-          </div>
+        <Input
+          label="Relationship"
+          name="relationship"
+          type="text"
+          placeholder="Brother, Sister, Uncle, Aunt, etc."
+          value={relationship}
+          onChange={(e) => setRelationship(e.target.value)}
+        />
+
+        <div className="flex">
+          <Input
+            label="Age"
+            name="age"
+            type="number"
+            placeholder="25"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            max={169}
+            min={1}
+          />
+
+          <Input
+            label="Budget in $"
+            name="budget"
+            type="number"
+            placeholder="100"
+            value={budget}
+            onChange={(e) => setBudget(e.target.value)}
+            min={1}
+          />
         </div>
 
-        <div>
-          <label
-            htmlFor="gender"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Gender
-          </label>
-          <div className="mt-2">
-            <input
-              id="gender"
-              name="gender"
-              type="text"
-              placeholder="Male, Female, Non-binary, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Gender"
+          name="gender"
+          type="text"
+          placeholder="Male, Female, Non-binary, etc."
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
+        />
 
-        <div>
-          <label
-            htmlFor="hobbies"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Hobbies
-          </label>
-          <div className="mt-2">
-            <input
-              id="hobbies"
-              name="hobbies"
-              type="text"
-              placeholder="Reading, Hiking, Traveling, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={hobbies}
-              onChange={(e) => setHobbies(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Hobbies"
+          name="hobbies"
+          type="text"
+          placeholder="Reading, Hiking, Traveling, etc."
+          value={hobbies}
+          onChange={(e) => setHobbies(e.target.value)}
+        />
 
-        <div>
-          <label
-            htmlFor="likes"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Likes
-          </label>
-          <div className="mt-2">
-            <input
-              id="likes"
-              name="likes"
-              type="text"
-              placeholder="Sunny days, Beaches, Cats, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={likes}
-              onChange={(e) => setLikes(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Likes"
+          name="likes"
+          type="text"
+          placeholder="Sunny days, Beaches, Cats, etc."
+          value={likes}
+          onChange={(e) => setLikes(e.target.value)}
+        />
 
-        <div>
-          <label
-            htmlFor="dislikes"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Dislikes
-          </label>
-          <div className="mt-2">
-            <input
-              id="dislikes"
-              name="dislikes"
-              type="text"
-              placeholder="Rainy days, Cold weather, Dogs, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={dislikes}
-              onChange={(e) => setDislikes(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Dislikes"
+          name="dislikes"
+          type="text"
+          placeholder="Rainy days, Cold weather, Dogs, etc."
+          value={dislikes}
+          onChange={(e) => setDislikes(e.target.value)}
+        />
 
-        <div>
-          <label
-            htmlFor="personality"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Personality
-          </label>
-          <div className="mt-2">
-            <input
-              id="personality"
-              name="personality"
-              type="text"
-              placeholder="Friendly, Sociable, Intelligent, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={personality}
-              onChange={(e) => setPersonality(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Personality"
+          name="personality"
+          type="text"
+          placeholder="Friendly, Sociable, Intelligent, etc."
+          value={personality}
+          onChange={(e) => setPersonality(e.target.value)}
+        />
 
-        <div>
-          <label
-            htmlFor="occasion"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Occasion
-          </label>
-          <div className="mt-2">
-            <input
-              id="occasion"
-              name="occasion"
-              type="text"
-              placeholder="Wedding, Birthday, Christmas, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={occasion}
-              onChange={(e) => setOccasion(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Occasion"
+          name="occasion"
+          type="text"
+          placeholder="Wedding, Birthday, Christmas, etc."
+          value={occasion}
+          onChange={(e) => setOccasion(e.target.value)}
+        />
 
-        <div>
-          <label
-            htmlFor="budget"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            budget
-          </label>
-          <div className="mt-2">
-            <input
-              id="budget"
-              name="budget"
-              type="number"
-              placeholder="$100"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-              min={0}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label
-            htmlFor="gift-type"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Gift type
-          </label>
-          <div className="mt-2">
-            <input
-              id="gift-type"
-              name="gift-type"
-              type="text"
-              placeholder="Clothing, Jewelry, Electronics, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={giftType}
-              onChange={(e) => setGiftType(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Gift type"
+          name="gift-type"
+          type="text"
+          placeholder="Clothing, Jewelry, Electronics, etc."
+          value={giftType}
+          onChange={(e) => setGiftType(e.target.value)}
+        />
 
         <div>
           <label
             htmlFor="preference"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
+            className="block text-sm text-center font-medium leading-6 text-gray-900 dark:text-gray-50"
           >
             Preference
           </label>
@@ -303,46 +215,41 @@ export default function Home() {
           </select>
         </div>
 
-        <div>
-          <label
-            htmlFor="lifestyle"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Lifestyle
-          </label>
-          <div className="mt-2">
-            <input
-              id="lifestyle"
-              name="lifestyle"
-              type="text"
-              placeholder="Active, homebody, tech-savvy, nature-loving, eco-conscious, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={lifestyle}
-              onChange={(e) => setLifestyle(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Lifestyle"
+          name="lifestyle"
+          type="text"
+          placeholder="Active, homebody, tech-savvy, nature-loving, eco-conscious, etc."
+          value={lifestyle}
+          onChange={(e) => setLifestyle(e.target.value)}
+        />
 
-        <div>
-          <label
-            htmlFor="closeness"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Closeness
-          </label>
-          <div className="mt-2">
-            <input
-              id="closeness"
-              name="closeness"
-              type="text"
-              placeholder="New acquaintance, close friend, long-term partner, casual colleague, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={closeness}
-              onChange={(e) => setCloseness(e.target.value)}
-            />
-          </div>
-        </div>
+        <Input
+          label="Closeness"
+          name="closeness"
+          type="text"
+          placeholder="New acquaintance, close friend, long-term partner, casual colleague, etc."
+          value={closeness}
+          onChange={(e) => setCloseness(e.target.value)}
+        />
 
+        <Input
+          label="Cultural aspect"
+          name="cultural-aspect"
+          type="text"
+          placeholder="Avoid alcohol, align with religious or cultural values, etc."
+          value={culturalAspect}
+          onChange={(e) => setCulturalAspect(e.target.value)}
+        />
+
+        <Input
+          label="Gift purpose"
+          name="gift-purpose"
+          type="text"
+          placeholder="To make them laugh, help them relax, challenge them, help them learn, or just to show appreciation, etc."
+          value={giftPurpose}
+          onChange={(e) => setGiftPurpose(e.target.value)}
+        />
         <div className="relative flex items-start">
           <div className="flex h-6 items-center">
             <input
@@ -364,26 +271,6 @@ export default function Home() {
           </div>
         </div>
 
-        <div>
-          <label
-            htmlFor="cultural-aspect"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Cultural aspect
-          </label>
-          <div className="mt-2">
-            <input
-              id="cultural-aspect"
-              name="cultural-aspect"
-              type="text"
-              placeholder="Avoid alcohol, align with religious or cultural values, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={culturalAspect}
-              onChange={(e) => setCulturalAspect(e.target.value)}
-            />
-          </div>
-        </div>
-
         <div className="relative flex items-start">
           <div className="flex h-6 items-center">
             <input
@@ -402,26 +289,6 @@ export default function Home() {
             >
               Eco-friendly or with minimal environmental impact
             </label>
-          </div>
-        </div>
-
-        <div>
-          <label
-            htmlFor="gift-purpose"
-            className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Gift purpose
-          </label>
-          <div className="mt-2">
-            <input
-              id="gift-purpose"
-              name="gift-purpose"
-              type="text"
-              placeholder="To make them laugh, help them relax, challenge them, help them learn, or just to show appreciation, etc."
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              value={giftPurpose}
-              onChange={(e) => setGiftPurpose(e.target.value)}
-            />
           </div>
         </div>
 

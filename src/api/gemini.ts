@@ -28,7 +28,7 @@ const buildPrompt = (attributes: TGiftAttributes): string => {
     My ${relationship} has/is ${hobbies}. 
     My ${relationship} likes ${likes}, but dislikes ${dislikes}. 
     My ${relationship}'s personality is ${personality}. 
-    The occasion is ${occasion}, and the budget is ${budget}. 
+    The occasion is ${occasion}, and the budget is ${budget}$. 
     My ${relationship} prefers ${giftType} gifts and is more inclined towards ${preference} ones. 
     My ${relationship}'s lifestyle is ${lifestyle}. 
     My ${relationship} is ${closeness}. 
