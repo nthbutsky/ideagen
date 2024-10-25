@@ -5,6 +5,7 @@ import { TGiftIdea, TGiftPreference } from "@/types/gift";
 import { getGeminiResponse } from "@/api/gemini";
 import { Input } from "@/components/Input";
 import { Select } from "@/components/Select";
+import { Checkbox } from "@/components/Checkbox";
 
 export default function Home() {
   const [relationship, setRelationship] = useState("");
@@ -200,7 +201,7 @@ export default function Home() {
           onChange={(e) => setGiftType(e.target.value)}
         />
 
-        <Select 
+        <Select
           label="Preference"
           name="preference"
           options={["Practical", "Sentimental"]}
@@ -243,47 +244,22 @@ export default function Home() {
           value={giftPurpose}
           onChange={(e) => setGiftPurpose(e.target.value)}
         />
-        <div className="relative flex items-start">
-          <div className="flex h-6 items-center">
-            <input
-              id="last-minute-gift"
-              name="last-minute-gift"
-              type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-              checked={lastMinuteGift}
-              onChange={(e) => setLastMinuteGift(e.target.checked)}
-            />
-          </div>
-          <div className="ml-3 text-sm leading-6">
-            <label
-              htmlFor="last-minute-gift"
-              className="font-medium text-gray-900 dark:text-gray-50"
-            >
-              Last minute gift
-            </label>
-          </div>
-        </div>
 
-        <div className="relative flex items-start">
-          <div className="flex h-6 items-center">
-            <input
-              id="eco-consciousness"
-              name="eco-consciousness"
-              type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-              checked={ecoConsciousness}
-              onChange={(e) => setEcoConsciousness(e.target.checked)}
-            />
-          </div>
-          <div className="ml-3 text-sm leading-6">
-            <label
-              htmlFor="eco-consciousness"
-              className="font-medium text-gray-900 dark:text-gray-50"
-            >
-              Eco-friendly or with minimal environmental impact
-            </label>
-          </div>
-        </div>
+        <Checkbox
+          label="Last minute gift"
+          name="last-minute-gift"
+          type="checkbox"
+          checked={lastMinuteGift}
+          onChange={(e) => setLastMinuteGift(e.target.checked)}
+        />
+
+        <Checkbox
+          label="Eco-friendly or with minimal environmental impact"
+          name="eco-consciousness"
+          type="checkbox"
+          checked={ecoConsciousness}
+          onChange={(e) => setEcoConsciousness(e.target.checked)}
+        />
 
         <button
           className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
