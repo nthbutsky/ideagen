@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TGiftIdea, TGiftPreference } from "@/types/gift";
 import { getGeminiResponse } from "@/api/gemini";
 import { Input } from "@/components/Input";
+import { Select } from "@/components/Select";
 
 export default function Home() {
   const [relationship, setRelationship] = useState("");
@@ -27,6 +28,9 @@ export default function Home() {
   const [response, setResponse] = useState<TGiftIdea[] | null>(null);
 
   const amazonAffiliateTag = "ideagenid-20";
+  const getItTomorrow = "p_90:8308922011";
+  const male = "p_n_gender_browse-bin:301386";
+  const female = "p_n_gender_browse-bin:301387";
 
   const getResponse = async () => {
     const prompt = {
@@ -63,9 +67,9 @@ export default function Home() {
 
   const handleIdea = (idea: string) => {
     console.log(idea);
-    const amazonUrl = `https://www.amazon.ca/s?k=${encodeURIComponent(
-      idea,
-    )}&tag=${amazonAffiliateTag}`;
+    const amazonUrl = `https://www.amazon.ca/s?k=${encodeURIComponent(idea)}${
+      lastMinuteGift ? `&rh=${getItTomorrow}` : ""
+    }&low-price=&high-price=${budget}&tag=${amazonAffiliateTag}`;
 
     // Redirect to the Amazon search URL
     window.open(amazonUrl, "_blank");
@@ -196,24 +200,13 @@ export default function Home() {
           onChange={(e) => setGiftType(e.target.value)}
         />
 
-        <div>
-          <label
-            htmlFor="preference"
-            className="block text-sm text-center font-medium leading-6 text-gray-900 dark:text-gray-50"
-          >
-            Preference
-          </label>
-          <select
-            id="preference"
-            name="preference"
-            className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            value={preference}
-            onChange={(e) => setPreference(e.target.value as TGiftPreference)}
-          >
-            <option>Practical</option>
-            <option>Sentimental</option>
-          </select>
-        </div>
+        <Select 
+          label="Preference"
+          name="preference"
+          options={["Practical", "Sentimental"]}
+          value={preference}
+          onChange={(e) => setPreference(e.target.value as TGiftPreference)}
+        />
 
         <Input
           label="Lifestyle"
