@@ -33,7 +33,7 @@ export const Checkbox = ({
       <div className="ml-3 text-sm leading-6">
         <label
           htmlFor={name}
-          className="font-medium text-gray-900 dark:text-gray-50"
+          className="font-medium text-gray-900"
         >
           {label}
         </label>
