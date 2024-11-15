@@ -4,7 +4,12 @@ import clsx from "clsx";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { QuestionMarkCircleIcon } from "@heroicons/react/20/solid";
 
-import Tooltip, { BODY_OFFSET, TBodyOffset, TOOLTIP_ALIGN, TTooltipAlign } from "@/components/Tooltip";
+import Tooltip, {
+  BODY_OFFSET,
+  TBodyOffset,
+  TOOLTIP_ALIGN,
+  TTooltipAlign,
+} from "@/components/Tooltip";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -12,12 +17,12 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   price?: boolean;
   tooltipText?: string;
   tooltipSettings?: {
-    align: TTooltipAlign;
-    bodyOffsetY: TBodyOffset
-    bodyOffsetX: TBodyOffset
-    detachBody: boolean
-    fullWidth: boolean
-  }
+    align?: TTooltipAlign;
+    bodyOffsetY?: TBodyOffset;
+    bodyOffsetX?: TBodyOffset;
+    detachBody?: boolean;
+    fullWidth?: boolean;
+  };
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -33,7 +38,7 @@ export const Input = ({
   tooltipText,
   tooltipSettings = {
     align: TOOLTIP_ALIGN.BOTTOM_RIGHT,
-    bodyOffsetY: BODY_OFFSET.NO_OFFSET,
+    bodyOffsetY: BODY_OFFSET.SPACE_2,
     bodyOffsetX: BODY_OFFSET.NO_OFFSET,
     detachBody: false,
     fullWidth: false,
@@ -45,16 +50,16 @@ export const Input = ({
 
   return (
     <div className={clsx("relative", className)}>
-          {label && (
+      {label && (
         <label
           htmlFor={name}
-          className="block text-sm font-medium leading-6 text-gray-900"
+          className="inline-block text-sm font-medium leading-6 text-gray-900"
         >
           {label}
         </label>
       )}
       {tooltipText && (
-        <div className="absolute w-full top-0 text-end">
+        <div className="absolute right-0 top-0">
           <Tooltip
             align={tooltipSettings.align}
             bodyOffsetY={tooltipSettings.bodyOffsetY}
@@ -64,17 +69,21 @@ export const Input = ({
             isOpen={tooltipOpen}
             onClose={() => setTooltipOpen(false)}
           >
-            <button type="button" onClick={() => setTooltipOpen(!tooltipOpen)}>
+            <button
+              className="block"
+              type="button"
+              onClick={() => setTooltipOpen(!tooltipOpen)}
+            >
               <QuestionMarkCircleIcon
                 aria-hidden="true"
-                className="size-5 text-gray-400"
+                className="size-6 text-gray-400"
               />
             </button>
             <>{tooltipText}</>
           </Tooltip>
         </div>
       )}
-    
+
       <div className="relative mt-2 rounded-md shadow-sm">
         {price && (
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
