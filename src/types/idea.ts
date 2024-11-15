@@ -1,11 +1,11 @@
-export enum EGiftPreference {
+export enum EIdeaPreference {
   PRACTICAL = 'Practical',
   SENTIMENTAL = 'Sentimental',
 }
 
-export type TGiftPreference = EGiftPreference;
+export type TIdeaPreference = EIdeaPreference;
 
-export type TGiftAttributes = {
+export type TIdeaAttributes = {
   relationship: string;
   age: string;
   gender?: string;
@@ -16,7 +16,7 @@ export type TGiftAttributes = {
   occasion: string;
   budget: string;
   giftType: string;
-  preference: TGiftPreference;
+  preference: TIdeaPreference;
   lifestyle: string;
   closeness: string;
   lastMinuteGift: boolean;
@@ -25,7 +25,7 @@ export type TGiftAttributes = {
   giftPurpose: string;
 };
 
-export type TGiftIdea = {
+export type TIdea = {
   category: string;
   items: string[];
 }
