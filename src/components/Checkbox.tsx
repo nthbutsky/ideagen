@@ -19,10 +19,9 @@ export const Checkbox = ({
       <div className="flex h-6 items-center">
         <input
           id={name}
-          name={name}
           type={type}
           className={clsx(
-            "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600",
+            "h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-600",
             className,
           )}
           checked={checked}
@@ -31,10 +30,7 @@ export const Checkbox = ({
         />
       </div>
       <div className="ml-3 text-sm leading-6">
-        <label
-          htmlFor={name}
-          className="font-medium text-gray-900"
-        >
+        <label htmlFor={name} className="font-medium text-gray-900">
           {label}
         </label>
       </div>

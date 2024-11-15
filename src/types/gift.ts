@@ -1,4 +1,9 @@
-export type TGiftPreference = 'Practical' | 'Sentimental';
+export enum EGiftPreference {
+  PRACTICAL = 'Practical',
+  SENTIMENTAL = 'Sentimental',
+}
+
+export type TGiftPreference = EGiftPreference;
 
 export type TGiftAttributes = {
   relationship: string;
