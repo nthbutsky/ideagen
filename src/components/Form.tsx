@@ -4,72 +4,114 @@ import { useState } from "react";
 import clsx from "clsx";
 
 import { getResponse, handleAmazonSearch } from "@/utils/ideaHelpers";
+import { validateField, validateForm } from "@/utils/fieldValidator";
 
 import { Input } from "@/components/Input";
 import { Checkbox } from "@/components/Checkbox";
 import { Toggle } from "@/components/Toggle";
 import { Button } from "@/components/Button";
 
-import { EIdeaPreference, TIdea, TIdeaPreference } from "@/types/idea";
+import { EIdeaPreference, TIdea, TIdeaAttributes } from "@/types/idea";
 
 export const Form = () => {
-  const [relationship, setRelationship] = useState("");
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
-  const [hobbies, setHobbies] = useState("");
-  const [likes, setLikes] = useState("");
-  const [dislikes, setDislikes] = useState("");
-  const [personality, setPersonality] = useState("");
-  const [occasion, setOccasion] = useState("");
-  const [budget, setBudget] = useState("");
-  const [giftType, setGiftType] = useState("");
-  const [preference, setPreference] = useState<TIdeaPreference>(
-    EIdeaPreference.SENTIMENTAL,
-  );
-  const [lifestyle, setLifestyle] = useState("");
-  const [closeness, setCloseness] = useState("");
-  const [lastMinuteGift, setLastMinuteGift] = useState(false);
-  const [culturalAspect, setCulturalAspect] = useState("");
-  const [ecoConsciousness, setEcoConsciousness] = useState(false);
-  const [giftPurpose, setGiftPurpose] = useState("");
-
-  const [preferenceToggle, setPreferenceToggle] = useState(false); 
-  // false = sentimental, true = practical
-
+  const [formData, setFormData] = useState<TIdeaAttributes>({
+    relationship: "",
+    age: "",
+    gender: "",
+    hobbies: "",
+    likes: "",
+    dislikes: "",
+    personality: "",
+    occasion: "",
+    budget: "",
+    giftType: "",
+    preference: EIdeaPreference.SENTIMENTAL,
+    lifestyle: "",
+    closeness: "",
+    lastMinuteGift: false,
+    culturalAspect: "",
+    ecoConsciousness: false,
+    giftPurpose: "",
+  });
   const [ideas, setIdeas] = useState<TIdea[] | null>(null);
-  
-  const handlePrompt = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const prompt = {
-      relationship,
-      age,
-      gender,
-      hobbies,
-      likes,
-      dislikes,
-      personality,
-      occasion,
-      budget,
-      giftType,
-      preference,
-      lifestyle,
-      closeness,
-      lastMinuteGift,
-      culturalAspect,
-      ecoConsciousness,
-      giftPurpose,
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  const handleInputChange = (key: string, value: string | boolean) => {
+    const updatedErrors = validateField(key, value, formErrors);
+    setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
+
+    const isCharForNum = () => {
+      return (
+        (key === "age" || key === "budget") &&
+        (isNaN(Number(value)) || Number(value) <= 0)
+      );
     };
 
-    console.log(prompt);
-
-    const ideas = await getResponse(prompt);
-    setIdeas(ideas);
+    setFormData((prev) => ({ ...prev, [key]: isCharForNum() ? "" : value }));
   };
 
-  const handlePreference = (value: boolean) => {
-    setPreferenceToggle(value);
-    setPreference(
-      value ? EIdeaPreference.PRACTICAL : EIdeaPreference.SENTIMENTAL,
+  const handlePreferenceChange = (value: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      preference: value
+        ? EIdeaPreference.PRACTICAL
+        : EIdeaPreference.SENTIMENTAL,
+    }));
+  };
+
+  const handlePrompt = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const updatedErrors = validateForm(formData);
+    if (Object.keys(updatedErrors).length > 0) {
+      setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
+      return;
+    }
+    setFormErrors(updatedErrors);
+
+    console.log({ ...formData });
+
+    const response = await getResponse({ ...formData });
+    setIdeas(response);
+  };
+
+  const renderIdeaList = () => {
+    if (!ideas) return null;
+
+    return (
+      <div className="mt-4">
+        <ul role="list" className="divide-y divide-gray-50">
+          {ideas.map((idea) => (
+            <li
+              key={idea.category}
+              className="flex justify-between gap-x-6 py-5"
+            >
+              <div className="min-w-0 flex-auto">
+                <p className="text-sm font-semibold leading-6 text-gray-900">
+                  {idea.category}
+                </p>
+                <ol className="mt-1 truncate text-xs leading-5 text-gray-500">
+                  {idea.items.map((item) => (
+                    <li key={item}>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleAmazonSearch(
+                            item,
+                            formData.lastMinuteGift,
+                            formData.budget,
+                          )
+                        }
+                      >
+                        {item}
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     );
   };
 
@@ -77,149 +119,175 @@ export const Form = () => {
     <>
       <form
         onSubmit={handlePrompt}
-        className="grid max-w-[1280px] grid-cols-2 items-start gap-4 md:grid-cols-4"
+        className="grid max-w-[1280px] grid-cols-2 items-start gap-x-6 md:grid-cols-4"
       >
         <Input
-          label="Relationship"
+          placeholder="Relationship"
           name="relationship"
           type="text"
           className="col-span-2 md:col-span-1"
-          value={relationship}
-          onChange={(e) => setRelationship(e.target.value)}
+          value={formData.relationship}
+          onChange={(e) => handleInputChange("relationship", e.target.value)}
           tooltipText="Parents, father, mother, brother, sister, uncle, aunt, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.relationship}
         />
 
         <Input
-          label="Gender"
+          placeholder="Gender"
           name="gender"
           type="text"
           className="col-span-2 md:col-span-1"
-          value={gender}
-          onChange={(e) => setGender(e.target.value)}
+          value={formData.gender}
+          onChange={(e) => handleInputChange("gender", e.target.value)}
           tooltipText="Male, Female, Non-binary, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.gender}
         />
 
         <Input
-          label="Occasion"
+          placeholder="Occasion"
           name="occasion"
           type="text"
           className="col-span-2 md:col-span-1"
-          value={occasion}
-          onChange={(e) => setOccasion(e.target.value)}
+          value={formData.occasion}
+          onChange={(e) => handleInputChange("occasion", e.target.value)}
           tooltipText="Wedding, Birthday, Christmas, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.occasion}
         />
 
-        <div className="col-span-2 contents gap-4 md:col-span-1 md:flex">
+        <div className="col-span-2 flex gap-4 md:col-span-1">
           <Input
-            label="Age"
+            placeholder="Age"
             name="age"
             type="text"
-            placeholder="25"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
+            value={formData.age}
+            onChange={(e) => handleInputChange("age", e.target.value)}
             min={1}
+            error={formErrors.age}
+            className="w-full"
           />
 
           <Input
-            label="Budget"
-            name="price"
+            placeholder="Budget"
+            name="budget"
             type="text"
-            placeholder="100"
-            value={budget}
+            value={formData.budget}
             price
-            onChange={(e) => setBudget(e.target.value)}
+            onChange={(e) => handleInputChange("budget", e.target.value)}
             min={1}
+            error={formErrors.budget}
+            className="w-full"
           />
         </div>
 
         <Input
-          label="Gift type"
+          placeholder="Gift type"
           name="gift-type"
           type="text"
           className="col-span-2 md:col-span-1"
-          value={giftType}
-          onChange={(e) => setGiftType(e.target.value)}
+          value={formData.giftType}
+          onChange={(e) => handleInputChange("giftType", e.target.value)}
           tooltipText="Clothing, Jewelry, Electronics, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.giftType}
         />
 
         <Input
-          label="Closeness"
+          placeholder="Closeness"
           name="closeness"
           type="text"
           className="col-span-2 md:col-span-1"
-          value={closeness}
-          onChange={(e) => setCloseness(e.target.value)}
+          value={formData.closeness}
+          onChange={(e) => handleInputChange("closeness", e.target.value)}
           tooltipText="New acquaintance, close friend, long-term partner, casual colleague, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.closeness}
         />
 
         <Input
-          label="Hobbies"
+          placeholder="Hobbies"
           name="hobbies"
           type="text"
           className="col-span-2"
-          value={hobbies}
-          onChange={(e) => setHobbies(e.target.value)}
+          value={formData.hobbies}
+          onChange={(e) => handleInputChange("hobbies", e.target.value)}
           tooltipText="Reading, hiking, traveling, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.hobbies}
         />
 
         <Input
-          label="Personality"
+          placeholder="Personality"
           name="personality"
           type="text"
           className="col-span-2"
-          value={personality}
-          onChange={(e) => setPersonality(e.target.value)}
+          value={formData.personality}
+          onChange={(e) => handleInputChange("personality", e.target.value)}
           tooltipText="Friendly, sociable, intelligent, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.personality}
         />
 
         <Input
-          label="Likes"
+          placeholder="Likes"
           name="likes"
           type="text"
           className="col-span-2"
-          value={likes}
-          onChange={(e) => setLikes(e.target.value)}
+          value={formData.likes}
+          onChange={(e) => handleInputChange("likes", e.target.value)}
           tooltipText="Sunny days, beaches, animals, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.likes}
         />
 
         <Input
-          label="Dislikes"
+          placeholder="Dislikes"
           name="dislikes"
           type="text"
           className="col-span-2"
-          value={dislikes}
-          onChange={(e) => setDislikes(e.target.value)}
+          value={formData.dislikes}
+          onChange={(e) => handleInputChange("dislikes", e.target.value)}
           tooltipText="Rainy days, cold weather, dogs, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.dislikes}
         />
 
         <Input
-          label="Lifestyle"
+          placeholder="Lifestyle"
           name="lifestyle"
           type="text"
           className="col-span-2"
-          value={lifestyle}
-          onChange={(e) => setLifestyle(e.target.value)}
+          value={formData.lifestyle}
+          onChange={(e) => handleInputChange("lifestyle", e.target.value)}
           tooltipText="Active, homebody, tech-savvy, nature-loving, eco-conscious, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.lifestyle}
         />
 
         <Input
-          label="Cultural aspect"
+          placeholder="Cultural aspect"
           name="cultural-aspect"
           type="text"
           className="col-span-2"
-          value={culturalAspect}
-          onChange={(e) => setCulturalAspect(e.target.value)}
-          tooltipText="Avoid alcohol, align with religious or cultural values like ..., etc."
+          value={formData.culturalAspect}
+          onChange={(e) => handleInputChange("culturalAspect", e.target.value)}
+          tooltipText="Avoid alcohol, align with religious or cultural values, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.culturalAspect}
         />
 
         <Input
-          label="Gift purpose"
+          placeholder="Gift purpose"
           name="gift-purpose"
           type="text"
           className="col-span-2"
-          value={giftPurpose}
-          onChange={(e) => setGiftPurpose(e.target.value)}
+          value={formData.giftPurpose}
+          onChange={(e) => handleInputChange("giftPurpose", e.target.value)}
           tooltipText="To make them laugh, help them relax, challenge them, help them learn, or just to show appreciation, etc."
+          tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
+          error={formErrors.giftPurpose}
         />
 
         <div className="col-span-2">
@@ -227,29 +295,34 @@ export const Form = () => {
             label="Last minute gift"
             name="last-minute-gift"
             type="checkbox"
-            checked={lastMinuteGift}
-            onChange={(e) => setLastMinuteGift(e.target.checked)}
+            checked={formData.lastMinuteGift}
+            onChange={(e) =>
+              handleInputChange("lastMinuteGift", e.target.checked)
+            }
           />
 
           <Checkbox
             label="Eco-friendly / minimal environmental impact"
             name="eco-consciousness"
             type="checkbox"
-            checked={ecoConsciousness}
-            onChange={(e) => setEcoConsciousness(e.target.checked)}
+            checked={formData.ecoConsciousness}
+            onChange={(e) =>
+              handleInputChange("ecoConsciousness", e.target.checked)
+            }
           />
         </div>
 
         <Toggle
           label="Preference"
           name="preference"
-          onChange={(value) => handlePreference(value)}
-          checked={preferenceToggle}
+          onChange={handlePreferenceChange}
+          checked={formData.preference === EIdeaPreference.PRACTICAL}
         >
           <div className="h-6 overflow-hidden">
             <div
               className={clsx("duration-300 ease-in-out", {
-                "-translate-y-6": preference === EIdeaPreference.PRACTICAL,
+                "-translate-y-6":
+                  formData.preference === EIdeaPreference.PRACTICAL,
               })}
             >
               <div>{EIdeaPreference.SENTIMENTAL}</div>
@@ -259,48 +332,17 @@ export const Form = () => {
         </Toggle>
 
         <div className="flex h-full items-center justify-end">
-          <Button primary type="submit" text="Let's find ideas" size="xl" />
+          <Button
+            disabled={Object.values(formErrors).some((error) => error)}
+            primary
+            type="submit"
+            text="Let's find ideas"
+            size="xl"
+          />
         </div>
       </form>
 
-      {ideas && (
-        <div className="mt-4">
-          <ul role="list" className="divide-y divide-gray-50">
-            {ideas.map((idea) => (
-              <li
-                key={idea.category}
-                className="flex justify-between gap-x-6 py-5"
-              >
-                <div className="flex min-w-0 gap-x-4">
-                  <div className="min-w-0 flex-auto">
-                    <p className="text-sm font-semibold leading-6 text-gray-900">
-                      {idea.category}
-                    </p>
-                    <ol className="mt-1 truncate text-xs leading-5 text-gray-500">
-                      {idea.items.map((item) => (
-                        <li key={item}>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleAmazonSearch(
-                                item,
-                                lastMinuteGift,
-                                budget,
-                              )
-                            }
-                          >
-                            {item}
-                          </button>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {renderIdeaList()}
     </>
   );
 };

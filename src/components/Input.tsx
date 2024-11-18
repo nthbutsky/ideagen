@@ -12,7 +12,7 @@ import Tooltip, {
 } from "@/components/Tooltip";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   error?: string;
   price?: boolean;
   tooltipText?: string;
@@ -36,13 +36,7 @@ export const Input = ({
   error,
   price,
   tooltipText,
-  tooltipSettings = {
-    align: TOOLTIP_ALIGN.BOTTOM_RIGHT,
-    bodyOffsetY: BODY_OFFSET.SPACE_2,
-    bodyOffsetX: BODY_OFFSET.NO_OFFSET,
-    detachBody: false,
-    fullWidth: false,
-  },
+  tooltipSettings,
   onChange,
   ...props
 }: IProps) => {
@@ -53,38 +47,13 @@ export const Input = ({
       {label && (
         <label
           htmlFor={name}
-          className="inline-block text-sm font-medium leading-6 text-gray-900"
+          className="mb-2 inline-block text-sm font-medium leading-6 text-gray-900"
         >
           {label}
         </label>
       )}
-      {tooltipText && (
-        <div className="absolute right-0 top-0">
-          <Tooltip
-            align={tooltipSettings.align}
-            bodyOffsetY={tooltipSettings.bodyOffsetY}
-            bodyOffsetX={tooltipSettings.bodyOffsetX}
-            detachBody={tooltipSettings.detachBody}
-            fullWidth={tooltipSettings.fullWidth}
-            isOpen={tooltipOpen}
-            onClose={() => setTooltipOpen(false)}
-          >
-            <button
-              className="block"
-              type="button"
-              onClick={() => setTooltipOpen(!tooltipOpen)}
-            >
-              <QuestionMarkCircleIcon
-                aria-hidden="true"
-                className="size-6 text-gray-400"
-              />
-            </button>
-            <>{tooltipText}</>
-          </Tooltip>
-        </div>
-      )}
 
-      <div className="relative mt-2 rounded-md shadow-sm">
+      <div className="relative rounded-md shadow-sm">
         {price && (
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <span className="text-gray-500 sm:text-sm">$</span>
@@ -99,6 +68,10 @@ export const Input = ({
           className={clsx(
             "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6",
             { "pl-7": price },
+            {
+              "text-red-900 ring-red-300 placeholder:text-red-300 focus:ring-red-500":
+                error,
+            },
           )}
           aria-invalid={error ? "true" : "false"}
           aria-describedby={name + "-error"}
@@ -106,8 +79,37 @@ export const Input = ({
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
           {...props}
         />
+        {tooltipText && !error && (
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+            <Tooltip
+              align={tooltipSettings?.align ?? TOOLTIP_ALIGN.BOTTOM_RIGHT}
+              bodyOffsetY={
+                tooltipSettings?.bodyOffsetY ?? BODY_OFFSET.NO_OFFSET
+              }
+              bodyOffsetX={
+                tooltipSettings?.bodyOffsetX ?? BODY_OFFSET.NO_OFFSET
+              }
+              detachBody={tooltipSettings?.detachBody ?? false}
+              fullWidth={tooltipSettings?.fullWidth ?? false}
+              isOpen={tooltipOpen}
+              onClose={() => setTooltipOpen(false)}
+            >
+              <button
+                className="block"
+                type="button"
+                onClick={() => setTooltipOpen(!tooltipOpen)}
+              >
+                <QuestionMarkCircleIcon
+                  aria-hidden="true"
+                  className="size-5 text-gray-400"
+                />
+              </button>
+              <>{tooltipText}</>
+            </Tooltip>
+          </div>
+        )}
         {error && (
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ExclamationCircleIcon
               aria-hidden="true"
               className="size-5 text-red-500"
@@ -115,11 +117,19 @@ export const Input = ({
           </div>
         )}
       </div>
-      {error && (
-        <p id="email-error" className="mt-2 text-sm text-red-600">
+      <div className="h-6">
+        <p
+          id={name + "-error"}
+          className={clsx(
+            "absolute -z-10 -translate-y-6 text-xs font-medium leading-6 text-red-600 duration-300 ease-in-out",
+            {
+              "-translate-y-0": error,
+            },
+          )}
+        >
           {error}
         </p>
-      )}
+      </div>
     </div>
   );
 };
