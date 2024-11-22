@@ -1,6 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import {
+  ForwardRefExoticComponent,
+  PropsWithoutRef,
+  ReactNode,
+  RefAttributes,
+  SVGProps,
+  useState,
+} from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -23,11 +30,11 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import { Sidebar } from "@/components/Sidebar";
 
-type THeroIcon = React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<React.SVGProps<SVGSVGElement>> & {
+type THeroIcon = ForwardRefExoticComponent<
+  PropsWithoutRef<SVGProps<SVGSVGElement>> & {
     title?: string;
     titleId?: string;
-  } & React.RefAttributes<SVGSVGElement>
+  } & RefAttributes<SVGSVGElement>
 >;
 
 export interface INavigation {
@@ -47,7 +54,7 @@ const userNavigation = [
   { name: "Sign out", href: "#" },
 ];
 
-export const Shell = ({ children }: { children: React.ReactNode }) => {
+export const Shell = ({ children }: { children: ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (

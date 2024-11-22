@@ -1,20 +1,3 @@
-import { getGeminiResponse } from "@/api/gemini";
-import { TIdeaAttributes } from "@/types/idea";
-
-export const getResponse = async (prompt: TIdeaAttributes) => {
-  try {
-    const jsonResponse = await getGeminiResponse(prompt);
-    console.log(jsonResponse);
-
-    const parsedData = JSON.parse(jsonResponse);
-    console.log(parsedData);
-    return parsedData;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
 enum EAmazonTags {
   AFFILIATE = "ideagenid-20",
   GET_IT_TOMORROW = "p_90:8308922011",

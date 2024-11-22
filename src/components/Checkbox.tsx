@@ -1,8 +1,9 @@
 import clsx from "clsx";
+import { ChangeEvent, InputHTMLAttributes } from "react";
 
-interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Checkbox = ({
@@ -25,7 +26,7 @@ export const Checkbox = ({
             className,
           )}
           checked={checked}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
           {...props}
         />
       </div>

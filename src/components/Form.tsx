@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import clsx from "clsx";
 
-import { getResponse, handleAmazonSearch } from "@/utils/ideaHelpers";
+import { getResponse } from "@/utils/promptHelpers";
+import { handleAmazonSearch } from "@/utils/amazonHelpers";
 import { validateField, validateForm } from "@/utils/fieldValidator";
 
 import { Input } from "@/components/Input";
@@ -11,10 +12,12 @@ import { Checkbox } from "@/components/Checkbox";
 import { Toggle } from "@/components/Toggle";
 import { Button } from "@/components/Button";
 
-import { EIdeaPreference, TIdea, TIdeaAttributes } from "@/types/idea";
+import { EGiftPreference, IIdea, TPromptAttributes } from "@/types/idea";
+import { useToast } from "@/context/ToastContext";
+import { IResponse } from "@/types/response";
 
 export const Form = () => {
-  const [formData, setFormData] = useState<TIdeaAttributes>({
+  const [formData, setFormData] = useState<TPromptAttributes>({
     relationship: "",
     age: "",
     gender: "",
@@ -25,7 +28,7 @@ export const Form = () => {
     occasion: "",
     budget: "",
     giftType: "",
-    preference: EIdeaPreference.SENTIMENTAL,
+    preference: EGiftPreference.SENTIMENTAL,
     lifestyle: "",
     closeness: "",
     lastMinuteGift: false,
@@ -33,8 +36,10 @@ export const Form = () => {
     ecoConsciousness: false,
     giftPurpose: "",
   });
-  const [ideas, setIdeas] = useState<TIdea[] | null>(null);
+  const [ideaList, setIdeaList] = useState<IIdea[] | null>(null);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  const { addToast } = useToast();
 
   const handleInputChange = (key: string, value: string | boolean) => {
     const updatedErrors = validateField(key, value, formErrors);
@@ -54,43 +59,49 @@ export const Form = () => {
     setFormData((prev) => ({
       ...prev,
       preference: value
-        ? EIdeaPreference.PRACTICAL
-        : EIdeaPreference.SENTIMENTAL,
+        ? EGiftPreference.PRACTICAL
+        : EGiftPreference.SENTIMENTAL,
     }));
   };
 
-  const handlePrompt = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePrompt = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const updatedErrors = validateForm(formData);
-    if (Object.keys(updatedErrors).length > 0) {
+    if (Object.entries(updatedErrors).length > 0) {
       setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
       return;
     }
     setFormErrors(updatedErrors);
 
-    console.log({ ...formData });
+    console.log(formData);
 
-    const response = await getResponse({ ...formData });
-    setIdeas(response);
+    const result = await getResponse(formData) as IResponse;
+    console.log(result)
+    if (result.status === "error") {
+      addToast(result.response.details?.message || "Unknown Error", "error");
+      return
+    }       
+    
+    setIdeaList(result.response.data);
   };
 
   const renderIdeaList = () => {
-    if (!ideas) return null;
+    if (!ideaList) return null;
 
     return (
       <div className="mt-4">
         <ul role="list" className="divide-y divide-gray-50">
-          {ideas.map((idea) => (
+          {ideaList.map((item) => (
             <li
-              key={idea.category}
+              key={item.category}
               className="flex justify-between gap-x-6 py-5"
             >
               <div className="min-w-0 flex-auto">
                 <p className="text-sm font-semibold leading-6 text-gray-900">
-                  {idea.category}
+                  {item.category}
                 </p>
                 <ol className="mt-1 truncate text-xs leading-5 text-gray-500">
-                  {idea.items.map((item) => (
+                  {item.ideas.map((item) => (
                     <li key={item}>
                       <button
                         type="button"
@@ -315,18 +326,18 @@ export const Form = () => {
         <Toggle
           label="Preference"
           name="preference"
-          onChange={handlePreferenceChange}
-          checked={formData.preference === EIdeaPreference.PRACTICAL}
+          onChangeAction={handlePreferenceChange}
+          checked={formData.preference === EGiftPreference.PRACTICAL}
         >
           <div className="h-6 overflow-hidden">
             <div
               className={clsx("duration-300 ease-in-out", {
                 "-translate-y-6":
-                  formData.preference === EIdeaPreference.PRACTICAL,
+                  formData.preference === EGiftPreference.PRACTICAL,
               })}
             >
-              <div>{EIdeaPreference.SENTIMENTAL}</div>
-              <div>{EIdeaPreference.PRACTICAL}</div>
+              <div>{EGiftPreference.SENTIMENTAL}</div>
+              <div>{EGiftPreference.PRACTICAL}</div>
             </div>
           </div>
         </Toggle>
@@ -341,6 +352,21 @@ export const Form = () => {
           />
         </div>
       </form>
+
+      <div className="flex flex-col gap-4">
+      <button onClick={() => addToast('This is a success message!', 'info')}>
+        Show Info Toast
+      </button>
+      <button onClick={() => addToast('This is a success message!', 'success')}>
+        Show Success Toast
+      </button>
+      <button onClick={() => addToast('This is a success message!', 'warning')}>
+        Show Warning Toast
+      </button>
+      <button onClick={() => addToast('This is an error message!', 'error')}>
+        Show Error Toast
+      </button>
+    </div>
 
       {renderIdeaList()}
     </>

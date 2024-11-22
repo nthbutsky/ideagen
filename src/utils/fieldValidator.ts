@@ -1,4 +1,4 @@
-import { TIdeaAttributes } from "@/types/idea";
+import { TPromptAttributes } from "@/types/idea";
 
 export const validateField = (
   key: string,
@@ -19,11 +19,11 @@ export const validateField = (
   return errors;
 };
 
-export const validateForm = (formData: TIdeaAttributes): Record<string, string> => {
+export const validateForm = (formData: TPromptAttributes): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   Object.entries(formData).forEach(([key, value]) => {
-    if (!value) {
+    if (value === '') {
       errors[key] = `Required field`;
     }
   });

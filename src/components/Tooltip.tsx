@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, ReactElement } from "react";
 
 export const TOOLTIP_ALIGN = {
   BOTTOM_CENTER: "BOTTOM_CENTER",
@@ -49,7 +49,7 @@ export default function Tooltip({
   fullWidth?: boolean;
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactElement[];
+  children: ReactElement[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
 

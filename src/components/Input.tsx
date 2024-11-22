@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, InputHTMLAttributes, useState } from "react";
 import clsx from "clsx";
 
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
@@ -11,7 +11,7 @@ import Tooltip, {
   TTooltipAlign,
 } from "@/components/Tooltip";
 
-interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   price?: boolean;
@@ -23,7 +23,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     detachBody?: boolean;
     fullWidth?: boolean;
   };
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Input = ({
@@ -76,7 +76,7 @@ export const Input = ({
           aria-invalid={error ? "true" : "false"}
           aria-describedby={name + "-error"}
           value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
           {...props}
         />
         {tooltipText && !error && (
@@ -123,7 +123,7 @@ export const Input = ({
           className={clsx(
             "absolute -z-10 -translate-y-6 text-xs font-medium leading-6 text-red-600 duration-300 ease-in-out",
             {
-              "-translate-y-0": error,
+              "translate-y-0": error,
             },
           )}
         >

@@ -5,6 +5,9 @@ import clsx from "clsx";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
 
+import { ToastProvider } from '@/context/ToastContext';
+import { ReactNode } from "react";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -15,12 +18,14 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en" className="h-full bg-white">
-      <body className={clsx("antialiased h-full", inter.className)}>
-        {children}
+      <body className={clsx("h-full antialiased", inter.className)}>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

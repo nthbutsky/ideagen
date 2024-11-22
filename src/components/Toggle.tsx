@@ -3,20 +3,20 @@
 import clsx from "clsx";
 
 import { Switch, SwitchProps } from "@headlessui/react";
+import { ReactNode } from "react";
 
 interface IProps extends SwitchProps {
   label: string;
   fullWidth?: boolean;
-  onChange: (value: boolean) => void;
-  children?: React.ReactNode;
+  onChangeAction: (value: boolean) => void;
+  children?: ReactNode;
 }
 
 export const Toggle = ({
   label,
   name,
-  className,
   checked,
-  onChange,
+  onChangeAction,
   children,
   ...props
 }: IProps) => {
@@ -39,7 +39,7 @@ export const Toggle = ({
         <Switch
           id={name}
           checked={checked}
-          onChange={(value) => onChange(value)}
+          onChange={(value) => onChangeAction(value)}
           className="group relative inline-flex h-5 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
           {...props}
         >

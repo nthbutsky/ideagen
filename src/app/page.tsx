@@ -1,7 +1,7 @@
 import { Form } from "@/components/Form";
 import { Shell } from "@/components/Shell";
 
-export const Home = () => {
+const Home = () => {
   return (
     <Shell>
       <Form />
