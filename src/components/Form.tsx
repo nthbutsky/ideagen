@@ -72,16 +72,14 @@ export const Form = () => {
       return;
     }
     setFormErrors(updatedErrors);
-
-    console.log(formData);
-
-    const result = await getResponse(formData) as IResponse;
-    console.log(result)
+    console.log(formData); // FIXME: remove
+    const result = (await getResponse(formData)) as IResponse;
+    console.log(result); // FIXME: remove
     if (result.status === "error") {
       addToast(result.response.details?.message || "Unknown Error", "error");
-      return
-    }       
-    
+      return;
+    }
+
     setIdeaList(result.response.data);
   };
 
@@ -352,21 +350,6 @@ export const Form = () => {
           />
         </div>
       </form>
-
-      <div className="flex flex-col gap-4">
-      <button onClick={() => addToast('This is a success message!', 'info')}>
-        Show Info Toast
-      </button>
-      <button onClick={() => addToast('This is a success message!', 'success')}>
-        Show Success Toast
-      </button>
-      <button onClick={() => addToast('This is a success message!', 'warning')}>
-        Show Warning Toast
-      </button>
-      <button onClick={() => addToast('This is an error message!', 'error')}>
-        Show Error Toast
-      </button>
-    </div>
 
       {renderIdeaList()}
     </>
