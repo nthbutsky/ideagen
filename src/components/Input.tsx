@@ -79,6 +79,7 @@ export const Input = ({
           onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
           {...props}
         />
+
         {tooltipText && !error && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-2">
             <Tooltip
@@ -108,6 +109,7 @@ export const Input = ({
             </Tooltip>
           </div>
         )}
+
         {error && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ExclamationCircleIcon
@@ -118,17 +120,17 @@ export const Input = ({
         )}
       </div>
       <div className="h-6">
-        <p
+        <span
           id={name + "-error"}
           className={clsx(
-            "absolute -z-10 -translate-y-6 text-xs font-medium leading-6 text-red-600 duration-300 ease-in-out",
+            "absolute -z-10 -translate-y-6 text-xs leading-6 text-red-600 duration-300 ease-in-out",
             {
               "translate-y-0": error,
             },
           )}
         >
           {error}
-        </p>
+        </span>
       </div>
     </div>
   );

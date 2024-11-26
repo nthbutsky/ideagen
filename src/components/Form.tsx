@@ -133,7 +133,7 @@ export const Form = () => {
         className="grid max-w-[1280px] grid-cols-2 items-start gap-x-6 md:grid-cols-4"
       >
         <Input
-          placeholder="Relationship"
+          label="Relationship"
           name="relationship"
           type="text"
           className="col-span-2 md:col-span-1"
@@ -145,7 +145,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Gender"
+          label="Gender"
           name="gender"
           type="text"
           className="col-span-2 md:col-span-1"
@@ -157,7 +157,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Occasion"
+          label="Occasion"
           name="occasion"
           type="text"
           className="col-span-2 md:col-span-1"
@@ -170,7 +170,7 @@ export const Form = () => {
 
         <div className="col-span-2 flex gap-4 md:col-span-1">
           <Input
-            placeholder="Age"
+            label="Age"
             name="age"
             type="text"
             value={formData.age}
@@ -181,7 +181,7 @@ export const Form = () => {
           />
 
           <Input
-            placeholder="Budget"
+            label="Budget"
             name="budget"
             type="text"
             value={formData.budget}
@@ -194,7 +194,7 @@ export const Form = () => {
         </div>
 
         <Input
-          placeholder="Gift type"
+          label="Gift type"
           name="gift-type"
           type="text"
           className="col-span-2 md:col-span-1"
@@ -206,7 +206,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Closeness"
+          label="Closeness"
           name="closeness"
           type="text"
           className="col-span-2 md:col-span-1"
@@ -218,7 +218,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Hobbies"
+          label="Hobbies"
           name="hobbies"
           type="text"
           className="col-span-2"
@@ -230,7 +230,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Personality"
+          label="Personality"
           name="personality"
           type="text"
           className="col-span-2"
@@ -242,7 +242,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Likes"
+          label="Likes"
           name="likes"
           type="text"
           className="col-span-2"
@@ -254,7 +254,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Dislikes"
+          label="Dislikes"
           name="dislikes"
           type="text"
           className="col-span-2"
@@ -266,7 +266,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Lifestyle"
+          label="Lifestyle"
           name="lifestyle"
           type="text"
           className="col-span-2"
@@ -278,7 +278,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Cultural aspect"
+          label="Cultural aspect"
           name="cultural-aspect"
           type="text"
           className="col-span-2"
@@ -290,7 +290,7 @@ export const Form = () => {
         />
 
         <Input
-          placeholder="Gift purpose"
+          label="Gift purpose"
           name="gift-purpose"
           type="text"
           className="col-span-2"

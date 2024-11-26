@@ -21,11 +21,12 @@ export const Button = ({
     <button
       type={type}
       className={clsx({
-        "bg-purple-600 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600":
+        "font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600":
           primary,
-        "bg-white font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50":
+        "font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300":
           secondary,
-        "hover:bg-purple-500": !disabled,
+        "bg-purple-600 hover:bg-purple-500": !disabled && primary,
+        "bg-white hover:bg-gray-50": !disabled && secondary,
         "rounded px-2 py-1 text-xs": size === "xs",
         "rounded px-2 py-1 text-sm": size === "sm",
         "rounded-md px-2.5 py-1.5 text-sm": size === "md",
