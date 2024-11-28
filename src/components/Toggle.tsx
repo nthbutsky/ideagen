@@ -40,7 +40,7 @@ export const Toggle = ({
           id={name}
           checked={checked}
           onChange={(value) => onChangeAction(value)}
-          className="group relative inline-flex h-5 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+          className="group relative inline-flex h-5 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
           {...props}
         >
           <span className="sr-only">Use setting for {label}</span>
@@ -50,7 +50,7 @@ export const Toggle = ({
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute mx-auto h-4 w-9 rounded-full bg-purple-600 transition-colors duration-200 ease-in-out group-data-[checked]:bg-purple-600"
+            className="pointer-events-none absolute mx-auto h-4 w-9 rounded-full bg-indigo-600 transition-colors duration-200 ease-in-out group-data-[checked]:bg-indigo-600"
           />
           <span
             aria-hidden="true"

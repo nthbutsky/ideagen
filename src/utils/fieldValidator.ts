@@ -8,7 +8,7 @@ export const validateField = (
   const errors: Record<string, string> = formErrors || {};
   delete errors[key];
 
-  if (!value) {
+  if (!value && typeof value !== "boolean") {
     errors[key] = `Required field`;
   } else if (key === "age" && (isNaN(Number(value)) || Number(value) <= 0)) {
     errors.age = "Must be a number";

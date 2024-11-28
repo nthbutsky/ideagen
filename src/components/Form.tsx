@@ -345,9 +345,10 @@ export const Form = () => {
             disabled={Object.values(formErrors).some((error) => error)}
             primary
             type="submit"
-            text="Let's find ideas"
             size="xl"
-          />
+          >
+            Let's find ideas
+          </Button>
         </div>
       </form>
 

@@ -29,6 +29,8 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import { Sidebar } from "@/components/Sidebar";
+import { signOutAction } from "@/app/actions";
+import { useAuth } from "@/context/AuthContext";
 
 type THeroIcon = ForwardRefExoticComponent<
   PropsWithoutRef<SVGProps<SVGSVGElement>> & {
@@ -50,12 +52,14 @@ const navigation: INavigation[] = [
 ];
 
 const userNavigation = [
-  { name: "Your profile", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Your profile", action: signOutAction },
+  { name: "Sign out", action: signOutAction },
 ];
 
 export const Shell = ({ children }: { children: ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const user = useAuth();
 
   return (
     <div>
@@ -121,7 +125,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                     aria-hidden="true"
                     className="ml-4 text-sm/6 font-semibold text-gray-900"
                   >
-                    User
+                    Hey, {user.email}
                   </span>
                   <ChevronDownIcon
                     aria-hidden="true"
@@ -131,16 +135,17 @@ export const Shell = ({ children }: { children: ReactNode }) => {
               </MenuButton>
               <MenuItems
                 transition
-                className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
                 {userNavigation.map((item) => (
                   <MenuItem key={item.name}>
-                    <a
-                      href={item.href}
-                      className="block px-3 py-1 text-sm/6 text-gray-900 data-[focus]:bg-gray-50 data-[focus]:outline-none"
+                    <button
+                      type="button"
+                      onClick={() => item.action()}
+                      className="w-full px-3 py-2 text-left text-sm/6 text-gray-900 data-[focus]:bg-gray-50"
                     >
                       {item.name}
-                    </a>
+                    </button>
                   </MenuItem>
                 ))}
               </MenuItems>
