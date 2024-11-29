@@ -12,9 +12,9 @@ export const ToastManager = forwardRef(function ToastManagerComponent(
 ) {
   const [toasts, setToasts] = useState<IToastData[]>([]);
 
-  const addToast = (message: string, type: TToastType) => {
+  const addToast = ({ message, type, autoHideDuration }: IToastData) => {
     const id = crypto.randomUUID();
-    setToasts((prev) => [...prev, { id, message, type }]);
+    setToasts((prev) => [...prev, { id, message, type, autoHideDuration }]);
   };
 
   const removeToast = (id: string) => {
@@ -36,7 +36,8 @@ export const ToastManager = forwardRef(function ToastManagerComponent(
             key={toast.id}
             message={toast.message}
             type={toast.type}
-            onCloseAction={() => removeToast(toast.id)}
+            onCloseAction={() => removeToast(toast.id as string)}
+            autoHideDuration={toast.autoHideDuration}
           />
         ))}
       </div>

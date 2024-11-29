@@ -1,14 +1,17 @@
 "use client";
 
-import React, { createContext, FunctionComponent, ReactNode, useContext, useRef } from "react";
-import {ToastManager} from "@/components/ToastManager";
-import { TToastType } from "@/types/toast";
+import React, {
+  createContext,
+  FunctionComponent,
+  ReactNode,
+  useContext,
+  useRef,
+} from "react";
+import { ToastManager } from "@/components/ToastManager";
+import { IToastData } from "@/types/toast";
 
 interface ToastContextValue {
-  addToast: (
-    message: string,
-    type: TToastType,
-  ) => void;
+  addToast: ({ message, type, autoHideDuration }: IToastData) => void;
 }
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
@@ -21,10 +24,9 @@ export const ToastProvider: FunctionComponent<{ children: ReactNode }> = ({
   } | null>(null);
 
   const addToast = (
-    message: string,
-    type: TToastType,
+    { message, type, autoHideDuration }: IToastData
   ) => {
-    toastManagerRef.current?.addToast(message, type);
+    toastManagerRef.current?.addToast({message, type, autoHideDuration});
   };
 
   return (

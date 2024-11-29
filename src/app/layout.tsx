@@ -32,12 +32,8 @@ const Layout = async ({
 
   const { data, error } = await supabase.auth.getUser();
 
-  if (error || !data?.user) {
-    redirect(ERoute.HOME);
-  }
-
-  console.dir(data); // FIXME: remove
-  console.dir(error); // FIXME: remove
+  console.log(data.user); // FIXME: remove
+  console.log(error?.message); // FIXME: remove
 
   return (
     <html lang="en" className="h-full bg-white">

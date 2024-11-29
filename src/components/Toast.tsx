@@ -15,6 +15,7 @@ interface IProps {
   message: string;
   type: TToastType;
   onCloseAction: () => void;
+  autoHideDuration?: number;
 }
 
 const ICONS = {
@@ -36,19 +37,30 @@ const ICONS = {
   ),
 };
 
-export const Toast = ({ message, type, onCloseAction }: IProps) => {
+export const Toast = ({
+  message,
+  type,
+  onCloseAction,
+  autoHideDuration = 0,
+}: IProps) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     setShow(true);
-  }, []);
+    if (autoHideDuration === 0) return;
+    const timer = setTimeout(() => {
+      handleClose();
+    }, autoHideDuration);
+
+    return () => clearTimeout(timer);
+  }, [autoHideDuration]);
 
   const handleClose = () => {
     setShow(false);
-
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       onCloseAction();
-    }, 300);
+    }, 200); // match the duration of the transition
+    return () => clearTimeout(timer);
   };
 
   return (
