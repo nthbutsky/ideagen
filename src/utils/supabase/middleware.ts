@@ -40,12 +40,12 @@ export async function updateSession(request: NextRequest) {
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith(ERoute.SIGN_IN) &&
+    !request.nextUrl.pathname.startsWith(ERoute.LOG_IN) &&
     !request.nextUrl.pathname.startsWith(ERoute.AUTH)
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
-    url.pathname = ERoute.SIGN_IN;
+    url.pathname = ERoute.LOG_IN;
     return NextResponse.redirect(url);
   }
 

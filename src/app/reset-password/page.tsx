@@ -4,7 +4,7 @@ import { LightBulbIcon } from "@heroicons/react/24/outline";
 
 import { ERoute } from "@/types/route";
 
-const ForgotPasswordPage = () => {
+const ResetPasswordPage = () => {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -70,10 +70,10 @@ const ForgotPasswordPage = () => {
           <p className="mt-10 text-center text-sm/6 text-gray-500">
             Changed your mind?{" "}
             <a
-              href={ERoute.SIGN_IN}
+              href={ERoute.LOG_IN}
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
-              Sign in here!
+              Log in here!
             </a>
           </p>
         </div>
@@ -82,4 +82,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ResetPasswordPage;

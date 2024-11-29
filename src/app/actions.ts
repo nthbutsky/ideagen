@@ -8,7 +8,7 @@ import { createClient } from "@/utils/supabase/server";
 import { ERoute } from "@/types/route";
 import { encodedRedirect } from "@/utils/redirectUtils";
 
-export async function signInAction(formData: FormData) {
+export async function logInUserAction(formData: FormData) {
   const supabase = await createClient();
   const payload = {
     email: formData.get("email") as string,
@@ -24,7 +24,7 @@ export async function signInAction(formData: FormData) {
   redirect(ERoute.DASHBOARD);
 }
 
-export async function signUpAction(formData: FormData) {
+export async function registerUserAction(formData: FormData) {
   const supabase = await createClient();
   const payload = {
     email: formData.get("email") as string,
@@ -37,10 +37,14 @@ export async function signUpAction(formData: FormData) {
   }
 
   // revalidatePath(ERoute.HOME, "layout");
-  encodedRedirect("success", ERoute.HOME, "Please check your email for confirmation link");
+  encodedRedirect(
+    "success",
+    ERoute.HOME,
+    "Please check your email for confirmation link",
+  );
 }
 
-export const signOutAction = async () => {
+export const logOutUserAction = async () => {
   const supabase = await createClient();
   const { error } = await supabase.auth.signOut();
 
@@ -49,7 +53,7 @@ export const signOutAction = async () => {
   }
 
   // revalidatePath(ERoute.HOME, "layout");
-  encodedRedirect("success", ERoute.HOME, "Signed out successfully");;
+  encodedRedirect("success", ERoute.HOME, "Signed out successfully");
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
@@ -57,40 +61,40 @@ export const forgotPasswordAction = async (formData: FormData) => {
   const supabase = await createClient();
   const payload = {
     email: formData.get("email") as string,
-  }
+  };
   const { error } = await supabase.auth.resetPasswordForEmail(payload.email, {
     redirectTo: `${origin}/auth/confirm?redirect_to=${ERoute.RESET_PASSWORD}`,
-  })
+  });
 
   if (error) {
     encodedRedirect("error", ERoute.FORGOT_PASSWORD, error.message);
   }
 
-  encodedRedirect("success", ERoute.HOME, "Check your email for a link to reset your password");;
-}
+  encodedRedirect(
+    "success",
+    ERoute.HOME,
+    "Check your email for a link to reset your password",
+  );
+};
 
 export const resetPasswordAction = async (formData: FormData) => {
   const supabase = await createClient();
   const payload = {
     password: formData.get("password") as string,
     confirmPassword: formData.get("confirm-password") as string,
-  }
+  };
 
   if (payload.password !== payload.confirmPassword) {
-    encodedRedirect(
-      "error",
-      ERoute.RESET_PASSWORD,
-      "Passwords do not match",
-    );
+    encodedRedirect("error", ERoute.RESET_PASSWORD, "Passwords do not match");
   }
 
   const { error } = await supabase.auth.updateUser({
-    password: payload.password
-  })
+    password: payload.password,
+  });
 
   if (error) {
     encodedRedirect("error", ERoute.RESET_PASSWORD, error.message);
   }
 
-  encodedRedirect("success", ERoute.SIGN_IN, "Password updated");;
-}
+  encodedRedirect("success", ERoute.LOG_IN, "Password updated");
+};

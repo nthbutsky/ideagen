@@ -2,16 +2,9 @@ import { forgotPasswordAction } from "@/app/actions";
 
 import { LightBulbIcon } from "@heroicons/react/24/outline";
 
-import { Banner } from "@/components/Banner";
-
 import { ERoute } from "@/types/route";
 
-const ForgotPasswordPage = async (props: {
-  searchParams: Promise<Record<string, string>>;
-}) => {
-
-  const searchParams = await props.searchParams;
-
+const ForgotPasswordPage = () => {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -60,20 +53,14 @@ const ForgotPasswordPage = async (props: {
           <p className="mt-10 text-center text-sm/6 text-gray-500">
             Already have account?{" "}
             <a
-              href={ERoute.SIGN_IN}
+              href={ERoute.LOG_IN}
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
-              Sign in here!
+              Log in here!
             </a>
           </p>
         </div>
       </div>
-
-      {"message" in searchParams && (
-        <div className="flex h-screen w-full flex-1 items-center justify-center gap-2 p-4 sm:max-w-md">
-          <Banner message={searchParams.message} />
-        </div>
-      )}
     </>
   );
 };

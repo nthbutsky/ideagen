@@ -1,7 +1,7 @@
 export enum ERoute {
   HOME = "/",
-  SIGN_IN = "/sign-in",
-  SIGN_UP = "/sign-up",
+  LOG_IN = "/login",
+  REGISTER = "/register",
   DASHBOARD = "/dashboard",
   NOT_FOUND = "/not-found",
   AUTH = "/auth",

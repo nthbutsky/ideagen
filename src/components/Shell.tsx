@@ -29,7 +29,7 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import { Sidebar } from "@/components/Sidebar";
-import { signOutAction } from "@/app/actions";
+import { logOutUserAction } from "@/app/actions";
 import { useAuth } from "@/context/AuthContext";
 
 type THeroIcon = ForwardRefExoticComponent<
@@ -52,8 +52,8 @@ const navigation: INavigation[] = [
 ];
 
 const userNavigation = [
-  { name: "Your profile", action: signOutAction },
-  { name: "Sign out", action: signOutAction },
+  { name: "Your profile", action: logOutUserAction },
+  { name: "Sign out", action: logOutUserAction },
 ];
 
 export const Shell = ({ children }: { children: ReactNode }) => {
