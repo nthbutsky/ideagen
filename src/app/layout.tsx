@@ -1,20 +1,12 @@
+import "@/app/globals.css";
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-
-import { createClient } from "@/utils/supabase/server";
-
-import clsx from "clsx";
-
 import { Inter } from "next/font/google";
-import "@/app/globals.css";
-
+import clsx from "clsx";
 import { Header } from "@/components/Header";
-
+import { createClient } from "@/utils/supabase/server";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/context/ToastContext";
-
-import { ERoute } from "@/types/route";
 
 const inter = Inter({ subsets: ["latin"] });
 

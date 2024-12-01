@@ -1,5 +1,3 @@
-import { TPromptAttributes } from "@/types/idea";
-
 export const validateField = (
   key: string,
   value: string | number | boolean | undefined,
@@ -15,18 +13,6 @@ export const validateField = (
   } else if (key === "budget" && (isNaN(Number(value)) || Number(value) <= 0)) {
     errors.budget = "Must be a number";
   }
-
-  return errors;
-};
-
-export const validateForm = (formData: TPromptAttributes): Record<string, string> => {
-  const errors: Record<string, string> = {};
-
-  Object.entries(formData).forEach(([key, value]) => {
-    if (value === '') {
-      errors[key] = `Required field`;
-    }
-  });
 
   return errors;
 };

@@ -1,7 +1,5 @@
 import clsx from "clsx";
-
 import { Cog6ToothIcon, LightBulbIcon } from "@heroicons/react/24/outline";
-
 import { INavigation } from "@/components/Shell";
 
 export const Sidebar = ({ navigation }: { navigation: INavigation[] }) => {

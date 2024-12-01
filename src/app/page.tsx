@@ -1,7 +1,5 @@
 import { redirect } from "next/navigation";
-
 import { ERoute } from "@/types/route";
-
 import { createClient } from "@/utils/supabase/server";
 
 const Home = async () => {

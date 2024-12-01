@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import { ChangeEvent, InputHTMLAttributes } from "react";
+import clsx from "clsx";
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;

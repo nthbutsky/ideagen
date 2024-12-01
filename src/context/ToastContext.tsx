@@ -8,10 +8,14 @@ import React, {
   useRef,
 } from "react";
 import { ToastManager } from "@/components/ToastManager";
-import { IToastData } from "@/types/toast";
+import { TToastType } from "@/types/toast";
 
 interface ToastContextValue {
-  addToast: ({ message, type, autoHideDuration }: IToastData) => void;
+  addToast: (
+    message: string,
+    type: TToastType,
+    autoHideDuration?: number,
+  ) => void;
 }
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
@@ -24,9 +28,11 @@ export const ToastProvider: FunctionComponent<{ children: ReactNode }> = ({
   } | null>(null);
 
   const addToast = (
-    { message, type, autoHideDuration }: IToastData
+    message: string,
+    type: TToastType,
+    autoHideDuration?: number,
   ) => {
-    toastManagerRef.current?.addToast({message, type, autoHideDuration});
+    toastManagerRef.current?.addToast(message, type, autoHideDuration);
   };
 
   return (

@@ -1,7 +1,7 @@
 export type TToastType = 'info' |'success' | 'warning' | 'error';
 
 export interface IToastData {
-  id?: string;
+  id: string;
   message: string;
   type: TToastType;
   autoHideDuration?: number;

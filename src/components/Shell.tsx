@@ -18,7 +18,6 @@ import {
   MenuItems,
   TransitionChild,
 } from "@headlessui/react";
-
 import {
   Bars3Icon,
   ClockIcon,
@@ -27,7 +26,6 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-
 import { Sidebar } from "@/components/Sidebar";
 import { logOutUserAction } from "@/app/actions";
 import { useAuth } from "@/context/AuthContext";

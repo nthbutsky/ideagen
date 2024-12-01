@@ -1,7 +1,5 @@
-import { logInUserAction } from "@/app/actions";
-
 import { LightBulbIcon } from "@heroicons/react/24/outline";
-
+import { logInUserAction } from "@/app/actions";
 import { ERoute } from "@/types/route";
 
 const LoginPage = () => {

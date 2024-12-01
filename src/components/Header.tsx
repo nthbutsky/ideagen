@@ -1,22 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Dialog, DialogPanel } from "@headlessui/react";
 import { useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
-
+import { Dialog, DialogPanel } from "@headlessui/react";
 import {
   Bars3Icon,
   XMarkIcon,
   LightBulbIcon,
 } from "@heroicons/react/24/outline";
-
 import { Button } from "@/components/Button";
-
 import { ERoute } from "@/types/route";
-
-import { useToast } from "@/context/ToastContext";
 import { TToastType } from "@/types/toast";
+import { useToast } from "@/context/ToastContext";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -32,11 +28,11 @@ export const Header = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
-  const type = searchParams.get("type");
+  const type = searchParams.get("type") as TToastType;
 
   useEffect(() => {
     if (!message || !type) return;
-    addToast({ message, type: type as TToastType });
+    addToast(message, type);
   }, [message, type]);
 
   if (pathname === ERoute.HOME) {

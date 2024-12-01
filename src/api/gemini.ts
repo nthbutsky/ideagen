@@ -1,7 +1,5 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
-
-import { buildPrompt } from "@/utils/promptHelpers";
-
+import { buildPrompt } from "@/helpers/geminiPrompt";
 import { TPromptAttributes } from "@/types/idea";
 
 const schema = {

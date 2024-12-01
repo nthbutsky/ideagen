@@ -2,19 +2,17 @@
 
 import { FormEvent, useState } from "react";
 import clsx from "clsx";
-
-import { getResponse } from "@/utils/promptHelpers";
-import { handleAmazonSearch } from "@/utils/amazonHelpers";
-import { validateField, validateForm } from "@/utils/fieldValidator";
-
 import { Input } from "@/components/Input";
 import { Checkbox } from "@/components/Checkbox";
 import { Toggle } from "@/components/Toggle";
 import { Button } from "@/components/Button";
-
+import { fetchGeminiResponse } from "@/utils/fetchGeminiResponse";
+import { handleAmazonSearch } from "@/helpers/amazonSearch";
+import { validateField } from "@/utils/validateField";
+import { validateForm } from "@/utils/validateForm";
 import { EGiftPreference, IIdea, TPromptAttributes } from "@/types/idea";
-import { useToast } from "@/context/ToastContext";
 import { IResponse } from "@/types/response";
+import { useToast } from "@/context/ToastContext";
 
 export const Form = () => {
   const [formData, setFormData] = useState<TPromptAttributes>({
@@ -73,10 +71,10 @@ export const Form = () => {
     }
     setFormErrors(updatedErrors);
     console.log(formData); // FIXME: remove
-    const result = (await getResponse(formData)) as IResponse;
+    const result = (await fetchGeminiResponse(formData)) as IResponse;
     console.log(result); // FIXME: remove
-    if (result.status === "error") {
-      addToast(result.response.details?.message || "Unknown Error", "error");
+    if (result.status === "error" && result.response.details) {
+      addToast(result.response.details.message, "error");
       return;
     }
 

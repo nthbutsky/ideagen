@@ -1,7 +1,5 @@
-import { resetPasswordAction } from "@/app/actions";
-
 import { LightBulbIcon } from "@heroicons/react/24/outline";
-
+import { resetPasswordAction } from "@/app/actions";
 import { ERoute } from "@/types/route";
 
 const ResetPasswordPage = () => {

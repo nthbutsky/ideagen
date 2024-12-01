@@ -1,5 +1,4 @@
 import clsx from "clsx";
-
 import React, { useRef, useEffect, ReactElement } from "react";
 
 export const TOOLTIP_ALIGN = {

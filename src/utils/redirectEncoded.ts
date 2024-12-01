@@ -8,10 +8,10 @@ import { redirect } from "next/navigation";
  * @returns {never} This function doesn't return as it triggers a redirect.
  */
 
-export function encodedRedirect(
+export const redirectEncoded = (
   type: "error" | "success",
   path: string,
   message: string,
-): never {
+): never => {
   return redirect(`${path}?type=${type}&message=${encodeURIComponent(message)}`);
 }
