@@ -12,13 +12,21 @@ export const ToastManager = forwardRef(function ToastManagerComponent(
 ) {
   const [toasts, setToasts] = useState<IToastData[]>([]);
 
-  const addToast = ( message: string, type: TToastType, autoHideDuration: number ) => {
+  const addToast = (
+    message: string,
+    type: TToastType,
+    autoHideDuration: number,
+  ) => {
     const id = crypto.randomUUID();
     setToasts((prev) => [...prev, { id, message, type, autoHideDuration }]);
   };
 
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
+
+    const url = new URL(window.location.href);
+    url.search = "";
+    window.history.pushState({}, document.title, url.toString());
   };
 
   useImperativeHandle(ref, () => ({

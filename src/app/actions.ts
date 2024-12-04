@@ -99,3 +99,57 @@ export const resetPasswordAction = async (formData: FormData) => {
   revalidatePath(ERoute.LOG_IN, "layout");
   redirectEncoded("success", ERoute.LOG_IN, "Password updated");
 };
+
+export const updateUserAction = async (formData: FormData) => {
+  const supabase = await createClient();
+
+  const payload: Record<string, string | undefined> = {};
+
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const newPassword = formData.get("new-password") as string;
+  const confirmNewPassword = formData.get("confirm-new-password") as string;
+
+  if (name) {
+    payload.name = name;
+  }
+  if (email) {
+    payload.email = email;
+  }
+  if (newPassword) {
+    if (newPassword !== confirmNewPassword) {
+      redirectEncoded("error", ERoute.DASHBOARD, "Passwords do not match");
+      return;
+    }
+    payload.password = newPassword;
+  }
+
+  const updateOptions: {
+    data?: {
+      name?: string;
+    };
+    email?: string;
+    password?: string;
+  } = {};
+
+  if (payload.name) {
+    updateOptions.data = {
+      name: payload.name,
+    };
+  }
+  if (payload.email) {
+    updateOptions.email = payload.email;
+  }
+  if (payload.password) {
+    updateOptions.password = payload.password;
+  }
+
+  const { error } = await supabase.auth.updateUser(updateOptions);
+
+  if (error) {
+    redirectEncoded("error", ERoute.DASHBOARD, error.message);
+  }
+
+  revalidatePath(ERoute.DASHBOARD, "layout");
+  redirectEncoded("success", ERoute.DASHBOARD, "Profile updated");
+};

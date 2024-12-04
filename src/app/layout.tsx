@@ -24,8 +24,8 @@ const Layout = async ({
 
   const { data, error } = await supabase.auth.getUser();
 
-  console.log(data.user); // FIXME: remove
-  console.log(error?.message); // FIXME: remove
+  console.log("data.user", data.user); // FIXME: remove
+  console.log("error?.message", error?.message); // FIXME: remove
 
   return (
     <html lang="en" className="h-full bg-white">

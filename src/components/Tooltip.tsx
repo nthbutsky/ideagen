@@ -78,10 +78,10 @@ export default function Tooltip({
   };
 
   useEffect(() => {
-    const handleOutsideClick = (event: Event) => {
+    const handleOutsideClick = (e: Event) => {
       if (
         containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        !containerRef.current.contains(e.target as Node)
       ) {
         onClose();
       }

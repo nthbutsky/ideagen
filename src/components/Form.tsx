@@ -70,9 +70,9 @@ export const Form = () => {
       return;
     }
     setFormErrors(updatedErrors);
-    console.log(formData); // FIXME: remove
+    console.log("formData", formData); // FIXME: remove
     const result = (await fetchGeminiResponse(formData)) as IResponse;
-    console.log(result); // FIXME: remove
+    console.log("result", result); // FIXME: remove
     if (result.status === "error" && result.response.details) {
       addToast(result.response.details.message, "error");
       return;
@@ -126,7 +126,7 @@ export const Form = () => {
     <>
       <form
         onSubmit={handlePrompt}
-        className="grid max-w-[1280px] grid-cols-2 items-start gap-x-6 md:grid-cols-4"
+        className="grid max-w-7xl grid-cols-2 items-start gap-x-6 md:grid-cols-4"
       >
         <Input
           label="Relationship"
@@ -340,7 +340,7 @@ export const Form = () => {
 
         <div className="flex h-full items-center justify-end">
           <Button
-            disabled={Object.values(formErrors).some((error) => error)}
+            isDisabled={Object.values(formErrors).some((error) => error)}
             primary
             type="submit"
             size="xl"

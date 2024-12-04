@@ -45,7 +45,7 @@ const initGenerativeModel = () => {
 export const getGeminiResponse = async (attributes: TPromptAttributes) => {
   const model = initGenerativeModel();
   const structuredPrompt = buildPrompt(attributes);
-
+  console.log("structuredPrompt", structuredPrompt)
   const result = await model.generateContent(structuredPrompt);
   return result.response.text();
 };

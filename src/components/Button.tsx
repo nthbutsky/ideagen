@@ -6,7 +6,7 @@ interface IProps {
   secondary?: boolean;
   type: "submit" | "reset" | "button";
   size: "xs" | "sm" | "md" | "lg" | "xl";
-  disabled?: boolean;
+  isDisabled?: boolean;
   onClickAction?: () => void;
   children?: ReactNode | string;
 }
@@ -16,7 +16,7 @@ export const Button = ({
   secondary,
   type,
   size,
-  disabled = false,
+  isDisabled = false,
   onClickAction,
   children,
 }: IProps) => {
@@ -28,16 +28,16 @@ export const Button = ({
           primary,
         "font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300":
           secondary,
-        "bg-indigo-600 hover:bg-indigo-500": !disabled && primary,
-        "bg-white hover:bg-gray-50": !disabled && secondary,
+        "bg-indigo-600 hover:bg-indigo-500": !isDisabled && primary,
+        "bg-white hover:bg-gray-50": !isDisabled && secondary,
         "rounded px-2 py-1 text-xs": size === "xs",
         "rounded px-2 py-1 text-sm": size === "sm",
         "rounded-md px-2.5 py-1.5 text-sm": size === "md",
         "rounded-md px-3 py-2 text-sm": size === "lg",
         "rounded-md px-3.5 py-2.5 text-sm": size === "xl",
-        "cursor-not-allowed bg-gray-400": disabled,
+        "cursor-not-allowed bg-gray-400": isDisabled,
       })}
-      disabled={disabled}
+      disabled={isDisabled}
       onClick={onClickAction}
     >
       {children}
