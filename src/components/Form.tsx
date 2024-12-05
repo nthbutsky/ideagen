@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import clsx from "clsx";
 import { Input } from "@/components/Input";
 import { Checkbox } from "@/components/Checkbox";
@@ -8,7 +8,7 @@ import { Toggle } from "@/components/Toggle";
 import { Button } from "@/components/Button";
 import { fetchGeminiResponse } from "@/utils/fetchGeminiResponse";
 import { handleAmazonSearch } from "@/helpers/amazonSearch";
-import { validateField } from "@/utils/validateField";
+import { TValidationRule, validateField } from "@/utils/validateField";
 import { validateForm } from "@/utils/validateForm";
 import { EGiftPreference, IIdea, TPromptAttributes } from "@/types/idea";
 import { IResponse } from "@/types/response";
@@ -39,18 +39,38 @@ export const Form = () => {
 
   const { addToast } = useToast();
 
-  const handleInputChange = (key: string, value: string | boolean) => {
-    const updatedErrors = validateField(key, value, formErrors);
+  const validationRules: { [key: string]: TValidationRule } = {
+    default: (value, key) =>
+      !value && typeof value !== "boolean" && key !== "gender"
+        ? "Required field"
+        : null,
+    age: (value) =>
+      isNaN(Number(value)) || Number(value) <= 0 ? "Must be a number" : null,
+    budget: (value) =>
+      isNaN(Number(value)) || Number(value) <= 0 ? "Must be a number" : null,
+  };
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    validate: typeof validateField,
+  ) => {
+    const key = e.target.name;
+    const value = e.target.value;
+
+    const updatedErrors = validate(key, value, validationRules, formErrors);
     setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
 
     const isCharForNum = () => {
-      return (
-        (key === "age" || key === "budget") &&
-        (isNaN(Number(value)) || Number(value) <= 0)
-      );
+      return validationRules.age(value) || validationRules.budget(value)
+        ? true
+        : false;
     };
 
     setFormData((prev) => ({ ...prev, [key]: isCharForNum() ? "" : value }));
+  };
+
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.checked }));
   };
 
   const handlePreferenceChange = (value: boolean) => {
@@ -134,7 +154,7 @@ export const Form = () => {
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.relationship}
-          onChange={(e) => handleInputChange("relationship", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Parents, father, mother, brother, sister, uncle, aunt, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.relationship}
@@ -146,7 +166,7 @@ export const Form = () => {
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.gender}
-          onChange={(e) => handleInputChange("gender", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Male, Female, Non-binary, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.gender}
@@ -158,7 +178,7 @@ export const Form = () => {
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.occasion}
-          onChange={(e) => handleInputChange("occasion", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Wedding, Birthday, Christmas, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.occasion}
@@ -170,7 +190,7 @@ export const Form = () => {
             name="age"
             type="text"
             value={formData.age}
-            onChange={(e) => handleInputChange("age", e.target.value)}
+            onChange={(e) => handleInputChange(e, validateField)}
             min={1}
             error={formErrors.age}
             className="w-full"
@@ -182,7 +202,7 @@ export const Form = () => {
             type="text"
             value={formData.budget}
             price
-            onChange={(e) => handleInputChange("budget", e.target.value)}
+            onChange={(e) => handleInputChange(e, validateField)}
             min={1}
             error={formErrors.budget}
             className="w-full"
@@ -191,11 +211,11 @@ export const Form = () => {
 
         <Input
           label="Gift type"
-          name="gift-type"
+          name="giftType"
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.giftType}
-          onChange={(e) => handleInputChange("giftType", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Clothing, Jewelry, Electronics, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.giftType}
@@ -207,7 +227,7 @@ export const Form = () => {
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.closeness}
-          onChange={(e) => handleInputChange("closeness", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="New acquaintance, close friend, long-term partner, casual colleague, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.closeness}
@@ -219,7 +239,7 @@ export const Form = () => {
           type="text"
           className="col-span-2"
           value={formData.hobbies}
-          onChange={(e) => handleInputChange("hobbies", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Reading, hiking, traveling, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.hobbies}
@@ -231,7 +251,7 @@ export const Form = () => {
           type="text"
           className="col-span-2"
           value={formData.personality}
-          onChange={(e) => handleInputChange("personality", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Friendly, sociable, intelligent, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.personality}
@@ -243,7 +263,7 @@ export const Form = () => {
           type="text"
           className="col-span-2"
           value={formData.likes}
-          onChange={(e) => handleInputChange("likes", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Sunny days, beaches, animals, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.likes}
@@ -255,7 +275,7 @@ export const Form = () => {
           type="text"
           className="col-span-2"
           value={formData.dislikes}
-          onChange={(e) => handleInputChange("dislikes", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Rainy days, cold weather, dogs, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.dislikes}
@@ -267,7 +287,7 @@ export const Form = () => {
           type="text"
           className="col-span-2"
           value={formData.lifestyle}
-          onChange={(e) => handleInputChange("lifestyle", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Active, homebody, tech-savvy, nature-loving, eco-conscious, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.lifestyle}
@@ -275,11 +295,11 @@ export const Form = () => {
 
         <Input
           label="Cultural aspect"
-          name="cultural-aspect"
+          name="culturalAspect"
           type="text"
           className="col-span-2"
           value={formData.culturalAspect}
-          onChange={(e) => handleInputChange("culturalAspect", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Avoid alcohol, align with religious or cultural values, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.culturalAspect}
@@ -287,11 +307,11 @@ export const Form = () => {
 
         <Input
           label="Gift purpose"
-          name="gift-purpose"
+          name="giftPurpose"
           type="text"
           className="col-span-2"
           value={formData.giftPurpose}
-          onChange={(e) => handleInputChange("giftPurpose", e.target.value)}
+          onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="To make them laugh, help them relax, challenge them, help them learn, or just to show appreciation, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.giftPurpose}
@@ -300,22 +320,18 @@ export const Form = () => {
         <div className="col-span-2">
           <Checkbox
             label="Last minute gift"
-            name="last-minute-gift"
+            name="lastMinuteGift"
             type="checkbox"
             checked={formData.lastMinuteGift}
-            onChange={(e) =>
-              handleInputChange("lastMinuteGift", e.target.checked)
-            }
+            onChange={handleCheckboxChange}
           />
 
           <Checkbox
             label="Eco-friendly / minimal environmental impact"
-            name="eco-consciousness"
+            name="ecoConsciousness"
             type="checkbox"
             checked={formData.ecoConsciousness}
-            onChange={(e) =>
-              handleInputChange("ecoConsciousness", e.target.checked)
-            }
+            onChange={handleCheckboxChange}
           />
         </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ChangeEvent,
   FormEvent,
   ForwardRefExoticComponent,
   PropsWithoutRef,
@@ -27,7 +28,7 @@ import { Input } from "@/components/Input";
 import { updateUserAction } from "@/app/actions";
 import { useAuth } from "@/context/AuthContext";
 import { Drawer } from "./Drawer";
-import { validateField } from "@/utils/validateField";
+import { TValidationRule, validateField } from "@/utils/validateField";
 import { useToast } from "@/context/ToastContext";
 
 type THeroIcon = ForwardRefExoticComponent<
@@ -63,8 +64,27 @@ export const Shell = ({ children }: { children: ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleInputChange = (key: string, value: string | boolean) => {
-    const updatedErrors = validateField(key, value, formErrors);
+  const validationRules: { [key: string]: TValidationRule } = {
+    email: (value) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value as string)
+        ? null
+        : "Please enter a valid email address",
+    password: (value) =>
+      (value as string).length < 8
+        ? "Password must be at least 8 characters long"
+        : null,
+    confirmPassword: (value) =>
+      value !== formData.newPassword ? "Passwords do not match" : null,
+  };
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    validate: typeof validateField,
+  ) => {
+    const key = e.target.name;
+    const value = e.target.value;
+
+    const updatedErrors = validate(key, value, validationRules, formErrors);
     setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
@@ -188,7 +208,8 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                 aria-hidden="true"
                 className="ml-4 text-sm/6 font-semibold text-gray-900"
               >
-                Hey, {user.user_metadata.name ? user.user_metadata.name : user.email}
+                Hey,{" "}
+                {user.user_metadata.name ? user.user_metadata.name : user.email}
               </span>
             </span>
           </button>
@@ -207,7 +228,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
         <form
           onSubmit={handleSubmit}
           id="user-profile-form"
-          className="space-y-2"
+          className="relative z-0 space-y-2"
           autoComplete="off"
         >
           <Input
@@ -215,7 +236,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             name="name"
             type="text"
             value={formData.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
+            onChange={(e) => handleInputChange(e, validateField)}
             error={formErrors.name}
             autoComplete="username"
           />
@@ -225,7 +246,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             name="email"
             type="email"
             value={formData.email}
-            onChange={(e) => handleInputChange("email", e.target.value)}
+            onChange={(e) => handleInputChange(e, validateField)}
             error={formErrors.email}
             autoComplete="email"
           />
@@ -236,7 +257,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             name="new-password"
             type="password"
             value={formData.newPassword}
-            onChange={(e) => handleInputChange("newPassword", e.target.value)}
+            onChange={(e) => handleInputChange(e, validateField)}
             error={formErrors.newPassword}
             autoComplete="new-password"
           />
@@ -247,9 +268,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             name="confirm-new-password"
             type="password"
             value={formData.confirmNewPassword}
-            onChange={(e) =>
-              handleInputChange("confirmNewPassword", e.target.value)
-            }
+            onChange={(e) => handleInputChange(e, validateField)}
             error={formErrors.confirmNewPassword}
             autoComplete="confirm-new-password"
           />

@@ -102,7 +102,7 @@ export default function Tooltip({
       {isOpen && (
         <div
           className={clsx(
-            "shadow-40 absolute z-40 h-fit rounded-lg bg-white p-3 text-start text-sm font-medium text-gray-900 shadow-lg ring-1 ring-black/5",
+            "shadow-40 absolute z-30 h-fit rounded-lg bg-white p-3 text-start text-sm font-medium text-gray-900 shadow-lg ring-1 ring-black/5",
             fullWidth ? "w-full" : "w-[200px]",
             {
               "left-1/2 -translate-x-1/2":

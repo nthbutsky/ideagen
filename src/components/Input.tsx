@@ -32,6 +32,7 @@ export const Input = ({
   className,
   value,
   error,
+  required,
   price,
   tooltipText,
   tooltipSettings,
@@ -41,7 +42,7 @@ export const Input = ({
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
   return (
-    <div className={clsx("relative", className)}>
+    <div className={clsx("", className)}>
       {label && (
         <label
           htmlFor={name}
@@ -72,7 +73,7 @@ export const Input = ({
             },
           )}
           aria-invalid={error ? "true" : "false"}
-          aria-describedby={name + "-error"}
+          aria-describedby={error ? name + "-error" : name + "-input"}
           value={value}
           onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
           {...props}
@@ -118,7 +119,7 @@ export const Input = ({
         )}
       </div>
       <div className="h-6">
-        <span
+      <span
           id={name + "-error"}
           className={clsx(
             "absolute -z-10 -translate-y-6 text-xs leading-6 text-red-600 duration-300 ease-in-out",
