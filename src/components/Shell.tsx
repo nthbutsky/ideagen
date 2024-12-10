@@ -8,6 +8,8 @@ import {
   ReactNode,
   RefAttributes,
   SVGProps,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 import {
@@ -53,6 +55,8 @@ const navigation: INavigation[] = [
 export const Shell = ({ children }: { children: ReactNode }) => {
   const user = useAuth();
   const { addToast } = useToast();
+
+  const isInitialRender = useRef(true);
 
   const [formData, setFormData] = useState({
     name: user.user_metadata.name || "",
@@ -142,6 +146,18 @@ export const Shell = ({ children }: { children: ReactNode }) => {
     ) as HTMLFormElement;
     form.requestSubmit();
   };
+
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+    setFormData((prev) => ({
+      ...prev,
+      name: user.user_metadata.name || "",
+      email: user.email || "",
+    }));
+  }, [user]);
 
   return (
     <div>

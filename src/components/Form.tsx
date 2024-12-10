@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import clsx from "clsx";
 import { Input } from "@/components/Input";
 import { Checkbox } from "@/components/Checkbox";
@@ -13,6 +13,55 @@ import { validateForm } from "@/utils/validateForm";
 import { EGiftPreference, IIdea, TPromptAttributes } from "@/types/idea";
 import { IResponse } from "@/types/response";
 import { useToast } from "@/context/ToastContext";
+import { dummyResponse } from "@/helpers/dummyResponse";
+import { useFormStatus } from "react-dom";
+
+const IdeaList = ({
+  list,
+  handleSearch,
+}: {
+  list: IIdea[] | null;
+  handleSearch: (item: string, options?: TPromptAttributes) => void;
+}) => {
+  if (!list) return null;
+
+  return (
+    <div className="mt-4">
+      <ul role="list" className="divide-y divide-gray-50">
+        {list.map((item) => (
+          <li key={item.category} className="flex justify-between gap-x-6 py-5">
+            <div className="min-w-0 flex-auto">
+              <p className="text-sm font-semibold leading-6 text-gray-900">
+                {item.category}
+              </p>
+              <ol className="mt-1 truncate text-xs leading-5 text-gray-500">
+                {item.ideas.map((item) => (
+                  <li key={item}>
+                    <button type="button" onClick={() => handleSearch(item)}>
+                      {item}
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const Submit = ({ isError }: { isError: boolean }) => {
+  const { pending } = useFormStatus();
+
+  return (
+    <div className="flex h-full items-center justify-end">
+      <Button primary type="submit" size="xl" isDisabled={isError}>
+        {pending ? "Loading..." : "Let's find ideas"}
+      </Button>
+    </div>
+  );
+};
 
 export const Form = () => {
   const [formData, setFormData] = useState<TPromptAttributes>({
@@ -34,7 +83,10 @@ export const Form = () => {
     ecoConsciousness: false,
     giftPurpose: "",
   });
-  const [ideaList, setIdeaList] = useState<IIdea[] | null>(null);
+  const [ideaList, setIdeaList] = useState<IIdea[] | null>(
+    // dummyResponse.response.data,
+    null,
+  );
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const { addToast } = useToast();
@@ -61,9 +113,10 @@ export const Form = () => {
     setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
 
     const isCharForNum = () => {
-      return validationRules.age(value) || validationRules.budget(value)
-        ? true
-        : false;
+      return (
+        (key === "age" || key === "budget") &&
+        (validationRules.age(value) || validationRules.budget(value))
+      );
     };
 
     setFormData((prev) => ({ ...prev, [key]: isCharForNum() ? "" : value }));
@@ -82,8 +135,7 @@ export const Form = () => {
     }));
   };
 
-  const handlePrompt = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     const updatedErrors = validateForm(formData);
     if (Object.entries(updatedErrors).length > 0) {
       setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
@@ -101,51 +153,10 @@ export const Form = () => {
     setIdeaList(result.response.data);
   };
 
-  const renderIdeaList = () => {
-    if (!ideaList) return null;
-
-    return (
-      <div className="mt-4">
-        <ul role="list" className="divide-y divide-gray-50">
-          {ideaList.map((item) => (
-            <li
-              key={item.category}
-              className="flex justify-between gap-x-6 py-5"
-            >
-              <div className="min-w-0 flex-auto">
-                <p className="text-sm font-semibold leading-6 text-gray-900">
-                  {item.category}
-                </p>
-                <ol className="mt-1 truncate text-xs leading-5 text-gray-500">
-                  {item.ideas.map((item) => (
-                    <li key={item}>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleAmazonSearch(
-                            item,
-                            formData.lastMinuteGift,
-                            formData.budget,
-                          )
-                        }
-                      >
-                        {item}
-                      </button>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
   return (
     <>
       <form
-        onSubmit={handlePrompt}
+        action={handleSubmit}
         className="grid max-w-7xl grid-cols-2 items-start gap-x-6 md:grid-cols-4"
       >
         <Input
@@ -354,19 +365,15 @@ export const Form = () => {
           </div>
         </Toggle>
 
-        <div className="flex h-full items-center justify-end">
-          <Button
-            isDisabled={Object.values(formErrors).some((error) => error)}
-            primary
-            type="submit"
-            size="xl"
-          >
-            Let's find ideas
-          </Button>
-        </div>
+        <Submit isError={Object.values(formErrors).some((error) => error)} />
       </form>
 
-      {renderIdeaList()}
+      <IdeaList
+        list={ideaList}
+        handleSearch={(idea) =>
+          handleAmazonSearch(idea, formData.lastMinuteGift, formData.budget)
+        }
+      />
     </>
   );
 };
