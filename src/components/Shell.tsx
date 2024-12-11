@@ -27,11 +27,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { Sidebar } from "@/components/Sidebar";
 import { Input } from "@/components/Input";
-import { updateUserAction } from "@/app/actions";
-import { useAuth } from "@/context/AuthContext";
+import { updateUserAction } from "@/app/actions/user";
 import { Drawer } from "./Drawer";
 import { TValidationRule, validateField } from "@/utils/validateField";
 import { useToast } from "@/context/ToastContext";
+import { useUser } from "@/hooks/useUser";
 
 type THeroIcon = ForwardRefExoticComponent<
   PropsWithoutRef<SVGProps<SVGSVGElement>> & {
@@ -53,14 +53,14 @@ const navigation: INavigation[] = [
 ];
 
 export const Shell = ({ children }: { children: ReactNode }) => {
-  const user = useAuth();
+  const { user } = useUser();
   const { addToast } = useToast();
 
   const isInitialRender = useRef(true);
 
   const [formData, setFormData] = useState({
-    name: user.user_metadata.name || "",
-    email: user.email || "",
+    name: user?.user_metadata.name || "",
+    email: user?.email || "",
     newPassword: "",
     confirmNewPassword: "",
   });
@@ -97,11 +97,11 @@ export const Shell = ({ children }: { children: ReactNode }) => {
     const { name, email, newPassword, confirmNewPassword } = formData;
     const formToSubmit: Record<string, string> = {};
 
-    if (name !== user.user_metadata.name && name.length !== 0) {
+    if (name !== user?.user_metadata.name && name.length !== 0) {
       formToSubmit["data.name"] = name;
     }
 
-    if (email !== user.email) {
+    if (email !== user?.email) {
       formToSubmit.email = email;
     }
 
@@ -154,8 +154,8 @@ export const Shell = ({ children }: { children: ReactNode }) => {
     }
     setFormData((prev) => ({
       ...prev,
-      name: user.user_metadata.name || "",
-      email: user.email || "",
+      name: user?.user_metadata.name || "",
+      email: user?.email || "",
     }));
   }, [user]);
 
@@ -225,7 +225,9 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                 className="ml-4 text-sm/6 font-semibold text-gray-900"
               >
                 Hey,{" "}
-                {user.user_metadata.name ? user.user_metadata.name : user.email}
+                {user?.user_metadata.name
+                  ? user.user_metadata.name
+                  : user?.email}
               </span>
             </span>
           </button>

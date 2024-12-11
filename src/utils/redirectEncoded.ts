@@ -9,8 +9,8 @@ import { redirect } from "next/navigation";
  */
 
 export const redirectEncoded = (
-  type: "error" | "success",
   path: string,
+  type: "error" | "success",
   message: string,
 ): never => {
   return redirect(`${path}?type=${type}&message=${encodeURIComponent(message)}`);

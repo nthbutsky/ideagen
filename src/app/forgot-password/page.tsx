@@ -1,5 +1,5 @@
 import { LightBulbIcon } from "@heroicons/react/24/outline";
-import { forgotPasswordAction } from "@/app/actions";
+import { forgotPasswordAction } from "@/app/actions/user";
 import { ERoute } from "@/types/route";
 
 const ForgotPasswordPage = () => {

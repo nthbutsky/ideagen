@@ -1,5 +1,5 @@
 import { LightBulbIcon } from "@heroicons/react/24/outline";
-import { registerUserAction } from "@/app/actions";
+import { registerUserAction } from "@/app/actions/user";
 import { ERoute } from "@/types/route";
 
 const RegisterPage = () => {

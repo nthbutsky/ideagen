@@ -4,8 +4,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import clsx from "clsx";
 import { Header } from "@/components/Header";
-import { createClient } from "@/utils/supabase/server";
-import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/context/ToastContext";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,22 +18,13 @@ const Layout = async ({
 }: Readonly<{
   children: ReactNode;
 }>) => {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase.auth.getUser();
-
-  console.log("data.user", data.user); // FIXME: remove
-  console.log("error?.message", error?.message); // FIXME: remove
-
   return (
     <html lang="en" className="h-full bg-white">
       <body className={clsx("h-full antialiased", inter.className)}>
-        <AuthProvider user={data.user}>
           <ToastProvider>
             <Header />
             {children}
           </ToastProvider>
-        </AuthProvider>
       </body>
     </html>
   );

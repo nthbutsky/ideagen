@@ -1,15 +1,4 @@
-import { redirect } from "next/navigation";
-import { ERoute } from "@/types/route";
-import { createClient } from "@/utils/supabase/server";
-
 const Home = async () => {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
-
-  if (!error && data?.user) {
-    redirect(ERoute.DASHBOARD);
-  }
-
   return (
     <div className="flex min-h-full flex-col justify-center bg-white px-6 py-24 sm:py-32 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">

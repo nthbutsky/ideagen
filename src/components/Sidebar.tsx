@@ -5,7 +5,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { INavigation } from "@/components/Shell";
-import { logOutUserAction } from "@/app/actions";
+import { logOutUserAction } from "@/app/actions/user";
 
 export const Sidebar = ({ navigation }: { navigation: INavigation[] }) => {
   return (
