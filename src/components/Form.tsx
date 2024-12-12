@@ -1,69 +1,29 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import clsx from "clsx";
+
 import { Input } from "@/components/Input";
 import { Checkbox } from "@/components/Checkbox";
 import { Toggle } from "@/components/Toggle";
 import { Button } from "@/components/Button";
+import { IdeaList } from "@/components/IdeaList";
+
 import { fetchGeminiResponse } from "@/utils/fetchGeminiResponse";
-import { handleAmazonSearch } from "@/helpers/amazonSearch";
 import { TValidationRule, validateField } from "@/utils/validateField";
 import { validateForm } from "@/utils/validateForm";
+
 import { EGiftPreference, IIdea, TPromptAttributes } from "@/types/idea";
 import { IResponse } from "@/types/response";
+
 import { useToast } from "@/context/ToastContext";
-import { dummyResponse } from "@/helpers/dummyResponse";
-import { useFormStatus } from "react-dom";
 
-const IdeaList = ({
-  list,
-  handleSearch,
-}: {
-  list: IIdea[] | null;
-  handleSearch: (item: string, options?: TPromptAttributes) => void;
-}) => {
-  if (!list) return null;
+import { handleAmazonSearch } from "@/helpers/amazonSearch";
 
-  return (
-    <div className="mt-4">
-      <ul role="list" className="divide-y divide-gray-50">
-        {list.map((item) => (
-          <li key={item.category} className="flex justify-between gap-x-6 py-5">
-            <div className="min-w-0 flex-auto">
-              <p className="text-sm font-semibold leading-6 text-gray-900">
-                {item.category}
-              </p>
-              <ol className="mt-1 truncate text-xs leading-5 text-gray-500">
-                {item.ideas.map((item) => (
-                  <li key={item}>
-                    <button type="button" onClick={() => handleSearch(item)}>
-                      {item}
-                    </button>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-const Submit = ({ isError }: { isError: boolean }) => {
-  const { pending } = useFormStatus();
-
-  return (
-    <div className="flex h-full items-center justify-end">
-      <Button primary type="submit" size="xl" isDisabled={isError}>
-        {pending ? "Loading..." : "Let's find ideas"}
-      </Button>
-    </div>
-  );
-};
+// import { dummyResponse } from "@/helpers/dummyResponse";
 
 export const Form = () => {
+  const [pending, setPending] = useState(false);
   const [formData, setFormData] = useState<TPromptAttributes>({
     relationship: "",
     age: "",
@@ -135,28 +95,37 @@ export const Form = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    const updatedErrors = validateForm(formData);
-    if (Object.entries(updatedErrors).length > 0) {
-      setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
-      return;
-    }
-    setFormErrors(updatedErrors);
-    console.log("formData", formData); // FIXME: remove
-    const result = (await fetchGeminiResponse(formData)) as IResponse;
-    console.log("result", result); // FIXME: remove
-    if (result.status === "error" && result.response.details) {
-      addToast(result.response.details.message, "error");
-      return;
-    }
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setPending(true);
 
-    setIdeaList(result.response.data);
+    try {
+      const updatedErrors = validateForm(formData);
+      if (Object.entries(updatedErrors).length > 0) {
+        setFormErrors((prev) => ({ ...prev, ...updatedErrors }));
+        return;
+      }
+      setFormErrors(updatedErrors);
+      console.log("formData", formData); // FIXME: remove
+      const result = (await fetchGeminiResponse(formData)) as IResponse;
+      console.log("result", result); // FIXME: remove
+
+      if (result.status === "error" && result.response.details) {
+        addToast(result.response.details.message, "error");
+        return;
+      }
+      setIdeaList(result.response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
     <>
       <form
-        action={handleSubmit}
+        onSubmit={handleSubmit}
         className="grid max-w-7xl grid-cols-2 items-start gap-x-6 md:grid-cols-4"
       >
         <Input
@@ -365,7 +334,16 @@ export const Form = () => {
           </div>
         </Toggle>
 
-        <Submit isError={Object.values(formErrors).some((error) => error)} />
+        <div className="flex h-full items-center justify-end">
+          <Button
+            primary
+            type="submit"
+            size="xl"
+            isDisabled={Object.values(formErrors).some((error) => error)}
+          >
+            {pending ? "Loading..." : "Let's find ideas"}
+          </Button>
+        </div>
       </form>
 
       <IdeaList

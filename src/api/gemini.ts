@@ -34,7 +34,7 @@ const initGenerativeModel = () => {
   );
   return genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
-    systemInstruction: `You only come up with ideas for gifts/presents. The response must be in JSON format. Always suggest at least 3 ideas for each category.`,
+    systemInstruction: `You only come up with ideas for gifts/presents. The response must be in JSON format. Always suggest at least 4 ideas for each category.`,
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: schema,
