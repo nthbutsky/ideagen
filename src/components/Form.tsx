@@ -20,7 +20,7 @@ import { useToast } from "@/context/ToastContext";
 
 import { handleAmazonSearch } from "@/helpers/amazonSearch";
 
-// import { dummyResponse } from "@/helpers/dummyResponse";
+import { dummyResponse } from "@/helpers/dummyResponse";
 
 export const Form = () => {
   const [pending, setPending] = useState(false);
@@ -44,8 +44,8 @@ export const Form = () => {
     giftPurpose: "",
   });
   const [ideaList, setIdeaList] = useState<IIdea[] | null>(
-    // dummyResponse.response.data,
-    null,
+    dummyResponse.response.data,
+    // null,
   );
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 

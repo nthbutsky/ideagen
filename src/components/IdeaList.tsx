@@ -1,6 +1,9 @@
 import clsx from "clsx";
 import { IIdea, TPromptAttributes } from "@/types/idea";
-import { CheckBadgeIcon, ArrowUpRightIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowUpRightIcon,
+  LightBulbIcon,
+} from "@heroicons/react/24/outline";
 
 export const IdeaList = ({
   list,
@@ -41,11 +44,11 @@ export const IdeaList = ({
                     <span
                       className={clsx(
                         "bg-indigo-50",
-                        "text-purple-700",
+                        "text-indigo-700",
                         "inline-flex rounded-lg p-3 ring-4 ring-white",
                       )}
                     >
-                      <CheckBadgeIcon aria-hidden="true" className="size-6" />
+                      <LightBulbIcon aria-hidden="true" className="size-6" />
                     </span>
                   </div>
 

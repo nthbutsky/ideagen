@@ -12,6 +12,11 @@ export const getUserAction = async () => {
   const { data, error } = await supabase.auth.getUser();
   console.log("data.user", data.user); // FIXME: remove
   console.log("error?.message", error?.message); // FIXME: remove
+
+  if (error) {
+    redirectEncoded(ERoute.HOME, "error", error.message);
+  }
+
   return { data, error };
 };
 
@@ -70,7 +75,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
     email: formData.get("email") as string,
   };
   const { error } = await supabase.auth.resetPasswordForEmail(payload.email, {
-    redirectTo: `${origin}/auth?redirect_to=${ERoute.RESET_PASSWORD}`,
+    redirectTo: `${origin}${ERoute.AUTH}?redirect_to=${ERoute.RESET_PASSWORD}`,
   });
 
   if (error) {
