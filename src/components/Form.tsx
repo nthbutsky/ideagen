@@ -13,7 +13,8 @@ import { fetchGeminiResponse } from "@/utils/fetchGeminiResponse";
 import { TValidationRule, validateField } from "@/utils/validateField";
 import { validateForm } from "@/utils/validateForm";
 
-import { EGiftPreference, EPromptAttributes, IIdea, IPromptAttributes } from "@/types/idea";
+import { IIdea } from "@/types/idea";
+import { EGiftPreference, EPromptAttributes, IPromptAttributes } from "@/types/prompt";
 import { IResponse } from "@/types/response";
 
 import { useToast } from "@/context/ToastContext";

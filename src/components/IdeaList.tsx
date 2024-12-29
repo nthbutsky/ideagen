@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { IIdea, IPromptAttributes } from "@/types/idea";
+import { IIdea } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 import {
   ArrowUpRightIcon,
   LightBulbIcon,

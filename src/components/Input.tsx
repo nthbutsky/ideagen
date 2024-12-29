@@ -32,7 +32,6 @@ export const Input = ({
   className,
   value,
   error,
-  required,
   price,
   tooltipText,
   tooltipSettings,

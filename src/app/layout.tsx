@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import clsx from "clsx";
@@ -21,10 +21,12 @@ const Layout = async ({
   return (
     <html lang="en" className="h-full bg-white">
       <body className={clsx("h-full antialiased", inter.className)}>
-          <ToastProvider>
+        <ToastProvider>
+          <Suspense>
             <Header />
-            {children}
-          </ToastProvider>
+          </Suspense>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

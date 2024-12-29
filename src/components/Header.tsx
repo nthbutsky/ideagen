@@ -33,7 +33,7 @@ export const Header = () => {
   useEffect(() => {
     if (!message || !type) return;
     addToast(message, type);
-  }, [message, type]);
+  }, [message, type, addToast]);
 
   if (pathname === ERoute.HOME) {
     return (

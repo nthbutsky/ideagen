@@ -1,5 +1,6 @@
 import { getGeminiResponse } from "@/api/gemini";
-import { IIdea, IPromptAttributes } from "@/types/idea";
+import { IIdea } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 import { IErrorResponse, IResponse } from "@/types/response";
 
 export const fetchGeminiResponse = async (prompt: IPromptAttributes) => {

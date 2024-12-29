@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { buildPrompt } from "@/helpers/geminiPrompt";
-import { IPromptAttributes } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 
 const schema = {
   description: "List of gift ideas categorized by type",

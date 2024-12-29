@@ -1,5 +1,5 @@
 import { TFormError } from "@/types/formError";
-import { IPromptAttributes } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 
 export type TValidationRule = (
   value: string | number | boolean | undefined,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Transition } from "@headlessui/react";
 import {
   InformationCircleIcon,
@@ -45,6 +45,14 @@ export const Toast = ({
 }: IProps) => {
   const [show, setShow] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setShow(false);
+    const timer = setTimeout(() => {
+      onCloseAction();
+    }, 200); // match the duration of the transition
+    return () => clearTimeout(timer);
+  }, [onCloseAction]);
+
   useEffect(() => {
     setShow(true);
     if (autoHideDuration === 0) return;
@@ -53,15 +61,7 @@ export const Toast = ({
     }, autoHideDuration);
 
     return () => clearTimeout(timer);
-  }, [autoHideDuration]);
-
-  const handleClose = () => {
-    setShow(false);
-    const timer = setTimeout(() => {
-      onCloseAction();
-    }, 200); // match the duration of the transition
-    return () => clearTimeout(timer);
-  };
+  }, [autoHideDuration, handleClose]);
 
   return (
     <Transition show={show}>

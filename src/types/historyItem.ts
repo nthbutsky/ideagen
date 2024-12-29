@@ -1,5 +1,5 @@
 import { IResponse } from "@/types/response";
-import { IPromptAttributes } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 
 export interface IHistoryItem {
   created_at: string;

@@ -2,7 +2,8 @@
 
 import { handleAmazonSearch } from "@/helpers/amazonSearch";
 import { IHistoryItem } from "@/types/historyItem";
-import { IIdea, IPromptAttributes } from "@/types/idea";
+import { IIdea,  } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 import { formatDate } from "@/utils/formatDate";
 
 const renderPromptAttributes = (attributes: IPromptAttributes) => {

@@ -1,24 +1,24 @@
-import { IPromptAttributes } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 
 export const buildPrompt = (attributes: IPromptAttributes): string => {
   const {
     relationship,
-    age,
     gender,
-    hobbies,
-    likes,
-    dislikes,
-    personality,
     occasion,
+    age,
     budget,
     type,
-    preference,
-    lifestyle,
     closeness,
-    lastMinute,
+    hobbies,
+    personality,
+    likes,
+    dislikes,
+    lifestyle,
     culturalAspect,
-    eco,
     purpose,
+    lastMinute,
+    eco,
+    preference,
   } = attributes;
 
   return `

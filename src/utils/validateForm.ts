@@ -1,4 +1,4 @@
-import { IPromptAttributes } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 
 export const validateForm = (formData: IPromptAttributes): Record<string, string> => {
   const errors: Record<string, string> = {};

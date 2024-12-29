@@ -1,5 +1,5 @@
 import { IDatabaseHistoryItem, IHistoryItem } from "@/types/historyItem";
-import { IPromptAttributes } from "@/types/idea";
+import { IPromptAttributes } from "@/types/prompt";
 import { IResponse } from "@/types/response";
 
 export function formatHistoryItem(item: IDatabaseHistoryItem): IHistoryItem {

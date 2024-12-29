@@ -33,6 +33,7 @@ import { TValidationRule, validateField } from "@/utils/validateField";
 import { useToast } from "@/context/ToastContext";
 import { useUser } from "@/hooks/useUser";
 import { ERoute } from "@/types/route";
+import { IPromptAttributes } from "@/types/prompt";
 
 type THeroIcon = ForwardRefExoticComponent<
   PropsWithoutRef<SVGProps<SVGSVGElement>> & {
@@ -86,7 +87,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
     e: ChangeEvent<HTMLInputElement>,
     validate: typeof validateField,
   ) => {
-    const key = e.target.name;
+    const key = e.target.name as keyof IPromptAttributes;
     const value = e.target.value;
 
     const updatedErrors = validate(key, value, validationRules, formErrors);
