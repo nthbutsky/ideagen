@@ -16,9 +16,9 @@ export enum EPromptAttributes {
   LIKES = 'likes',
   DISLIKES = 'dislikes',
   LIFESTYLE = 'lifestyle',
-  CULTURAL_ASPECT = 'cultural-aspect',
+  CULTURAL_ASPECT = 'culturalAspect',
   PURPOSE = 'purpose',
-  LAST_MINUTE = 'last-minute',
+  LAST_MINUTE = 'lastMinute',
   ECO = 'eco',
   PREFERENCE = 'preference',
 }

@@ -1,19 +1,25 @@
-export type TValidationRule = (value: string | number | boolean | undefined, key?: string) => string | null;
+import { TFormError } from "@/types/formError";
+import { IPromptAttributes } from "@/types/idea";
+
+export type TValidationRule = (
+  value: string | number | boolean | undefined,
+  key?: string,
+) => string | null;
 
 export const validateField = (
-  key: string,
+  key: keyof IPromptAttributes,
   value: string | number | boolean | undefined,
   rules: {
     [key: string]: TValidationRule;
   } = {},
-  formErrors: Record<string, string> = {},
-): Record<string, string> => {
-  const errors: Record<string, string> = formErrors || {};
+  formErrors: TFormError = {},
+): TFormError => {
+  const errors: TFormError = { ...formErrors };
   delete errors[key];
 
   const defaultRule = rules.default;
   if (defaultRule) {
-    const defaultError = defaultRule(value, key);
+    const defaultError = defaultRule(value, key as string);
     if (defaultError) {
       errors[key] = defaultError;
     }

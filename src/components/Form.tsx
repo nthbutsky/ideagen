@@ -20,6 +20,7 @@ import { useToast } from "@/context/ToastContext";
 
 import { handleAmazonSearch } from "@/helpers/amazonSearch";
 import { capFirstChar } from "@/utils/capFirstChar";
+import { TFormError } from "@/types/formError";
 
 // import { dummyResponse } from "@/helpers/dummyResponse";
 
@@ -48,7 +49,7 @@ export const Form = () => {
     // dummyResponse.response.data,
     null,
   );
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [formErrors, setFormErrors] = useState<TFormError>({});
 
   const { addToast } = useToast();
 
@@ -67,7 +68,7 @@ export const Form = () => {
     e: ChangeEvent<HTMLInputElement>,
     validate: typeof validateField,
   ) => {
-    const key = e.target.name;
+    const key = e.target.name as keyof IPromptAttributes;
     const value = e.target.value;
 
     const updatedErrors = validate(key, value, validationRules, formErrors);
@@ -199,7 +200,7 @@ export const Form = () => {
           onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Clothing, Jewelry, Electronics, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
-          error={formErrors.giftType}
+          error={formErrors.type}
         />
 
         <Input
@@ -295,7 +296,7 @@ export const Form = () => {
           onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="To make them laugh, help them relax, challenge them, help them learn, or just to show appreciation, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
-          error={formErrors.giftPurpose}
+          error={formErrors.purpose}
         />
 
         <div className="col-span-2 mb-4 md:mb-0">
