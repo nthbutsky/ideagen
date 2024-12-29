@@ -32,6 +32,7 @@ import { Drawer } from "./Drawer";
 import { TValidationRule, validateField } from "@/utils/validateField";
 import { useToast } from "@/context/ToastContext";
 import { useUser } from "@/hooks/useUser";
+import { ERoute } from "@/types/route";
 
 type THeroIcon = ForwardRefExoticComponent<
   PropsWithoutRef<SVGProps<SVGSVGElement>> & {
@@ -48,8 +49,8 @@ export interface INavigation {
 }
 
 const navigation: INavigation[] = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "History", href: "#", icon: ClockIcon, current: false },
+  { name: "Dashboard", href: ERoute.DASHBOARD, icon: HomeIcon, current: true },
+  { name: "History", href: ERoute.HISTORY, icon: ClockIcon, current: false },
 ];
 
 export const Shell = ({ children }: { children: ReactNode }) => {
@@ -234,7 +235,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
         </div>
 
         <main className="py-10">
-          <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+          <div className="max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>
 

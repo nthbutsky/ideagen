@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { IIdea, TPromptAttributes } from "@/types/idea";
+import { IIdea, IPromptAttributes } from "@/types/idea";
 import {
   ArrowUpRightIcon,
   LightBulbIcon,
@@ -10,7 +10,7 @@ export const IdeaList = ({
   handleSearch,
 }: {
   list: IIdea[] | null;
-  handleSearch: (item: string, options?: TPromptAttributes) => void;
+  handleSearch: (item: string, options?: IPromptAttributes) => void;
 }) => {
   if (!list) return null;
 

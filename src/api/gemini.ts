@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { buildPrompt } from "@/helpers/geminiPrompt";
-import { TPromptAttributes } from "@/types/idea";
+import { IPromptAttributes } from "@/types/idea";
 
 const schema = {
   description: "List of gift ideas categorized by type",
@@ -42,7 +42,7 @@ const initGenerativeModel = () => {
   });
 };
 
-export const getGeminiResponse = async (attributes: TPromptAttributes) => {
+export const getGeminiResponse = async (attributes: IPromptAttributes) => {
   const model = initGenerativeModel();
   const structuredPrompt = buildPrompt(attributes);
   console.log("structuredPrompt", structuredPrompt)

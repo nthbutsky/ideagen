@@ -1,6 +1,6 @@
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
 import {
-  Cog6ToothIcon,
   LightBulbIcon,
   ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
@@ -8,6 +8,8 @@ import { INavigation } from "@/components/Shell";
 import { logOutUserAction } from "@/app/actions/user";
 
 export const Sidebar = ({ navigation }: { navigation: INavigation[] }) => {
+  const pathname = usePathname();
+
   return (
     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-4 pb-4">
       <div className="flex h-16 shrink-0 items-center gap-2 pl-1 text-white">
@@ -23,7 +25,7 @@ export const Sidebar = ({ navigation }: { navigation: INavigation[] }) => {
                   <a
                     href={item.href}
                     className={clsx(
-                      item.current
+                      pathname === item.href
                         ? "bg-indigo-700 text-white"
                         : "text-indigo-200 hover:bg-indigo-700 hover:text-white",
                       "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
@@ -32,7 +34,7 @@ export const Sidebar = ({ navigation }: { navigation: INavigation[] }) => {
                     <item.icon
                       aria-hidden="true"
                       className={clsx(
-                        item.current
+                        pathname === item.href
                           ? "text-white"
                           : "text-indigo-200 group-hover:text-white",
                         "h-6 w-6 shrink-0",

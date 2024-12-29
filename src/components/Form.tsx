@@ -13,18 +13,19 @@ import { fetchGeminiResponse } from "@/utils/fetchGeminiResponse";
 import { TValidationRule, validateField } from "@/utils/validateField";
 import { validateForm } from "@/utils/validateForm";
 
-import { EGiftPreference, IIdea, TPromptAttributes } from "@/types/idea";
+import { EGiftPreference, EPromptAttributes, IIdea, IPromptAttributes } from "@/types/idea";
 import { IResponse } from "@/types/response";
 
 import { useToast } from "@/context/ToastContext";
 
 import { handleAmazonSearch } from "@/helpers/amazonSearch";
+import { capFirstChar } from "@/utils/capFirstChar";
 
-import { dummyResponse } from "@/helpers/dummyResponse";
+// import { dummyResponse } from "@/helpers/dummyResponse";
 
 export const Form = () => {
   const [pending, setPending] = useState(false);
-  const [formData, setFormData] = useState<TPromptAttributes>({
+  const [formData, setFormData] = useState<IPromptAttributes>({
     relationship: "",
     age: "",
     gender: "",
@@ -34,18 +35,18 @@ export const Form = () => {
     personality: "",
     occasion: "",
     budget: "",
-    giftType: "",
+    type: "",
     preference: EGiftPreference.SENTIMENTAL,
     lifestyle: "",
     closeness: "",
-    lastMinuteGift: false,
+    lastMinute: false,
     culturalAspect: "",
-    ecoConsciousness: false,
-    giftPurpose: "",
+    eco: false,
+    purpose: "",
   });
-  const [ideaList, setIdeaList] = useState<IIdea[] | null>(
-    dummyResponse.response.data,
-    // null,
+  const [ideaList, seIIdeaList] = useState<IIdea[] | null>(
+    // dummyResponse.response.data,
+    null,
   );
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
@@ -114,7 +115,7 @@ export const Form = () => {
         addToast(result.response.details.message, "error");
         return;
       }
-      setIdeaList(result.response.data);
+      seIIdeaList(result.response.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -126,11 +127,11 @@ export const Form = () => {
     <>
       <form
         onSubmit={handleSubmit}
-        className="grid max-w-7xl grid-cols-2 items-start gap-x-6 md:grid-cols-4"
+        className="grid grid-cols-2 items-start gap-x-6 md:grid-cols-4"
       >
         <Input
           label="Relationship"
-          name="relationship"
+          name={EPromptAttributes.RELATIONSHIP}
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.relationship}
@@ -142,7 +143,7 @@ export const Form = () => {
 
         <Input
           label="Gender"
-          name="gender"
+          name={EPromptAttributes.GENDER}
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.gender}
@@ -154,7 +155,7 @@ export const Form = () => {
 
         <Input
           label="Occasion"
-          name="occasion"
+          name={EPromptAttributes.OCCASION}
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.occasion}
@@ -167,7 +168,7 @@ export const Form = () => {
         <div className="col-span-2 flex gap-4 md:col-span-1">
           <Input
             label="Age"
-            name="age"
+            name={EPromptAttributes.AGE}
             type="text"
             value={formData.age}
             onChange={(e) => handleInputChange(e, validateField)}
@@ -178,7 +179,7 @@ export const Form = () => {
 
           <Input
             label="Budget"
-            name="budget"
+            name={EPromptAttributes.BUDGET}
             type="text"
             value={formData.budget}
             price
@@ -191,10 +192,10 @@ export const Form = () => {
 
         <Input
           label="Gift type"
-          name="giftType"
+          name={EPromptAttributes.TYPE}
           type="text"
           className="col-span-2 md:col-span-1"
-          value={formData.giftType}
+          value={formData.type}
           onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="Clothing, Jewelry, Electronics, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
@@ -203,7 +204,7 @@ export const Form = () => {
 
         <Input
           label="Closeness"
-          name="closeness"
+          name={EPromptAttributes.CLOSENESS}
           type="text"
           className="col-span-2 md:col-span-1"
           value={formData.closeness}
@@ -215,7 +216,7 @@ export const Form = () => {
 
         <Input
           label="Hobbies"
-          name="hobbies"
+          name={EPromptAttributes.HOBBIES}
           type="text"
           className="col-span-2"
           value={formData.hobbies}
@@ -227,7 +228,7 @@ export const Form = () => {
 
         <Input
           label="Personality"
-          name="personality"
+          name={EPromptAttributes.PERSONALITY}
           type="text"
           className="col-span-2"
           value={formData.personality}
@@ -239,7 +240,7 @@ export const Form = () => {
 
         <Input
           label="Likes"
-          name="likes"
+          name={EPromptAttributes.LIKES}
           type="text"
           className="col-span-2"
           value={formData.likes}
@@ -251,7 +252,7 @@ export const Form = () => {
 
         <Input
           label="Dislikes"
-          name="dislikes"
+          name={EPromptAttributes.DISLIKES}
           type="text"
           className="col-span-2"
           value={formData.dislikes}
@@ -263,7 +264,7 @@ export const Form = () => {
 
         <Input
           label="Lifestyle"
-          name="lifestyle"
+          name={EPromptAttributes.LIFESTYLE}
           type="text"
           className="col-span-2"
           value={formData.lifestyle}
@@ -275,7 +276,7 @@ export const Form = () => {
 
         <Input
           label="Cultural aspect"
-          name="culturalAspect"
+          name={EPromptAttributes.CULTURAL_ASPECT}
           type="text"
           className="col-span-2"
           value={formData.culturalAspect}
@@ -287,37 +288,37 @@ export const Form = () => {
 
         <Input
           label="Gift purpose"
-          name="giftPurpose"
+          name={EPromptAttributes.PURPOSE}
           type="text"
           className="col-span-2"
-          value={formData.giftPurpose}
+          value={formData.purpose}
           onChange={(e) => handleInputChange(e, validateField)}
           tooltipText="To make them laugh, help them relax, challenge them, help them learn, or just to show appreciation, etc."
           tooltipSettings={{ bodyOffsetX: "-8px", bodyOffsetY: "8px" }}
           error={formErrors.giftPurpose}
         />
 
-        <div className="col-span-2">
+        <div className="col-span-2 mb-4 md:mb-0">
           <Checkbox
             label="Last minute gift"
-            name="lastMinuteGift"
+            name={EPromptAttributes.LAST_MINUTE}
             type="checkbox"
-            checked={formData.lastMinuteGift}
+            checked={formData.lastMinute}
             onChange={handleCheckboxChange}
           />
 
           <Checkbox
             label="Eco-friendly / minimal environmental impact"
-            name="ecoConsciousness"
+            name={EPromptAttributes.ECO}
             type="checkbox"
-            checked={formData.ecoConsciousness}
+            checked={formData.eco}
             onChange={handleCheckboxChange}
           />
         </div>
 
         <Toggle
           label="Preference"
-          name="preference"
+          name={EPromptAttributes.PREFERENCE}
           onChangeAction={handlePreferenceChange}
           checked={formData.preference === EGiftPreference.PRACTICAL}
         >
@@ -328,8 +329,8 @@ export const Form = () => {
                   formData.preference === EGiftPreference.PRACTICAL,
               })}
             >
-              <div>{EGiftPreference.SENTIMENTAL}</div>
-              <div>{EGiftPreference.PRACTICAL}</div>
+              <div>{capFirstChar(EGiftPreference.SENTIMENTAL)}</div>
+              <div>{capFirstChar(EGiftPreference.PRACTICAL)}</div>
             </div>
           </div>
         </Toggle>
@@ -349,7 +350,7 @@ export const Form = () => {
       <IdeaList
         list={ideaList}
         handleSearch={(idea) =>
-          handleAmazonSearch(idea, formData.lastMinuteGift, formData.budget)
+          handleAmazonSearch(idea, formData.lastMinute, formData.budget)
         }
       />
     </>

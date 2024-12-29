@@ -1,6 +1,6 @@
 import { IIdea } from "@/types/idea";
 
-type TResponseStatus = "success" | "error";
+type TResponseStatus = "success" | "error" | "unknown";
 
 export interface IErrorResponse {
   code: string;

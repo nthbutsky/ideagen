@@ -6,7 +6,7 @@ import { redirectEncoded } from "@/utils/redirectEncoded";
 
 const Dashboard = async () => {
   const { data, error } = await getUserAction();
-  
+
   if (!data && error) {
     return redirectEncoded(ERoute.HOME, "error", error.message);; 
   }

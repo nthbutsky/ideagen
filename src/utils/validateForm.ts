@@ -1,6 +1,6 @@
-import { TPromptAttributes } from "@/types/idea";
+import { IPromptAttributes } from "@/types/idea";
 
-export const validateForm = (formData: TPromptAttributes): Record<string, string> => {
+export const validateForm = (formData: IPromptAttributes): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   Object.entries(formData).forEach(([key, value]) => {

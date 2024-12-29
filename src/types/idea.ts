@@ -1,26 +1,46 @@
 export enum EGiftPreference {
-  PRACTICAL = 'Practical',
-  SENTIMENTAL = 'Sentimental',
+  PRACTICAL = 'practical',
+  SENTIMENTAL = 'sentimental',
 }
 
-export type TPromptAttributes = {
+export enum EPromptAttributes {
+  RELATIONSHIP = 'relationship',
+  GENDER = 'gender',
+  OCCASION = 'occasion',
+  AGE = 'age',
+  BUDGET = 'budget',
+  TYPE = 'type',
+  CLOSENESS = 'closeness',
+  HOBBIES = 'hobbies',
+  PERSONALITY = 'personality',
+  LIKES = 'likes',
+  DISLIKES = 'dislikes',
+  LIFESTYLE = 'lifestyle',
+  CULTURAL_ASPECT = 'cultural-aspect',
+  PURPOSE = 'purpose',
+  LAST_MINUTE = 'last-minute',
+  ECO = 'eco',
+  PREFERENCE = 'preference',
+}
+
+export interface IPromptAttributes {
   relationship: string;
-  age: string;
   gender?: string;
+  occasion: string;
+  age: string;
+  budget: string;
+  type: string;
+  closeness: string;
   hobbies: string;
+  personality: string;
   likes: string;
   dislikes: string;
-  personality: string;
-  occasion: string;
-  budget: string;
-  giftType: string;
-  preference: EGiftPreference;
   lifestyle: string;
-  closeness: string;
-  lastMinuteGift: boolean;
   culturalAspect?: string;
-  ecoConsciousness: boolean;
-  giftPurpose: string;
+  purpose: string;
+  lastMinute: boolean;
+  eco: boolean;
+  preference: EGiftPreference;
 };
 
 export interface IIdea {

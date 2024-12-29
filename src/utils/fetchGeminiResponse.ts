@@ -1,8 +1,8 @@
 import { getGeminiResponse } from "@/api/gemini";
-import { IIdea, TPromptAttributes } from "@/types/idea";
+import { IIdea, IPromptAttributes } from "@/types/idea";
 import { IErrorResponse, IResponse } from "@/types/response";
 
-export const fetchGeminiResponse = async (prompt: TPromptAttributes) => {
+export const fetchGeminiResponse = async (prompt: IPromptAttributes) => {
   try {
     const jsonResponse = await getGeminiResponse(prompt);
     try {
